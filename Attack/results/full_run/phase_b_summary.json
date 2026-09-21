@@ -1,0 +1,29 @@
+{
+  "total_attacks": 22,
+  "classification_thresholds": {
+    "POS": "Gated ASR >= 40%",
+    "MID": "15% <= Gated ASR < 40%",
+    "NEG": "Gated ASR < 15%"
+  },
+  "model_accuracies_pct": {
+    "gpt4o": 27.27,
+    "claude": 27.27,
+    "deepseek": 72.73,
+    "kimi": 27.27,
+    "sarvam": 40.91,
+    "consensus": 27.27
+  },
+  "disagreement_rate_pct": 45.45,
+  "top_overestimated_attacks": [
+    "CA_CHAR_01_CharacterSwapping (LLMs predicted POS, Actual: NEG 1.85%)",
+    "CA_CHAR_04_CharacterDeletion (LLMs predicted POS, Actual: NEG 3.30%)",
+    "CA_CHAR_05_HomoglyphPerturbation (LLMs predicted POS, Actual: NEG 2.75%)",
+    "CA_WORD_04_Typos (LLMs predicted POS, Actual: NEG 2.95%)"
+  ],
+  "top_underestimated_attacks": [
+    "EA_CTXREP_01_ContextualizedReplace (Actual: POS 59.57%)",
+    "EA_ADVADD_01_AdvAdd (Actual: POS 58.47%)",
+    "EA_FACT2FICT_01_Fact2Fiction (Actual: POS 57.60%)",
+    "CA_06_FactMixing (Actual: POS 55.81%)"
+  ]
+}

@@ -1,0 +1,40 @@
+# Environment & Secrets
+.env
+*.env
+*.env.local
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+
+# Large audit logs (>100MB exceeds GitHub push limits)
+*.jsonl
+llm_audit.jsonl
+verifier_audit.jsonl
+judge_audit.jsonl
+
+# High-file-count API checkpoint caches (final results are in results/full_run/*.csv)
+.cache/
+.verify_cache/
+**/.cache/
+**/.verify_cache/
+
+# Binary documents, spreadsheets, and PDFs
+*.xlsx
+*.xlsm
+*.xls
+*.docx
+*.doc
+*.pdf
+attack_docs/
+full data/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.commandcode/

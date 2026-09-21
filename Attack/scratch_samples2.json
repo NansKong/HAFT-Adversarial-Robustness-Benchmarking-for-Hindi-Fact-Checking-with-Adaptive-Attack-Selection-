@@ -1,0 +1,38 @@
+[
+  {
+    "attack": "CA_03_LexicallyInformed",
+    "row_id": 48,
+    "original_claim": "झारखंड सरकार ने प्राकृतिक आपदाओं के कारण पूरे राज्य में स्कूल एक महीने के लिए बंद करने की घोषणा की।",
+    "adversarial_claim": "झारखंड शासन ने प्राकृतिक आपदाओं के कारण पूरे राज्य में स्कूल एक महीने के लिए बंद करने की घोषणा की।",
+    "gold_label": "NEI",
+    "verdict": "REF",
+    "flipped": true
+  },
+  {
+    "attack": "CA_03_LexicallyInformed",
+    "row_id": 118,
+    "original_claim": "जल शक्ति मंत्रालय ने 21 जनवरी 2026 को सुजल ग्राम संवाद का तीसरा संस्करण आयोजित किया।",
+    "adversarial_claim": "पानी शक्ति मंत्रालय ने 21 जनवरी 2026 को सुजल ग्राम संवाद का तीसरा संस्करण आयोजित किया।",
+    "gold_label": "SUP",
+    "verdict": "REF",
+    "flipped": true
+  },
+  {
+    "attack": "CA_WORD_13_PhoneticPerturbation",
+    "row_id": 0,
+    "original_claim": "रक्तचाप घटाने का एकमात्र प्रभावी तरीका दवा लेना है।",
+    "adversarial_claim": "रक्तचाप घटाने का एकमात्र प्रभावी तरीका दवाई लेना है।",
+    "gold_label": "REF",
+    "verdict": "REF",
+    "flipped": false
+  },
+  {
+    "attack": "CA_WORD_13_PhoneticPerturbation",
+    "row_id": 1,
+    "original_claim": "भारतीय नौसेना ने सुरंग के भीतर बचाव कार्य के लिए विशेष पनडुब्बी तैनात की थी।",
+    "adversarial_claim": NaN,
+    "gold_label": "NEI",
+    "verdict": NaN,
+    "flipped": NaN
+  }
+]

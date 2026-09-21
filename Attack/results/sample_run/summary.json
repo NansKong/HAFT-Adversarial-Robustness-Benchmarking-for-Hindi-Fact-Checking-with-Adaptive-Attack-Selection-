@@ -1,0 +1,226 @@
+{
+  "baseline_accuracy": 0.8333333333333334,
+  "baseline_failures": 1,
+  "per_attack": {
+    "CA_03_LexicallyInformed": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 4,
+      "gated_eligible": 4,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_CHAR_01_CharacterSwapping": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_CHAR_02_CharacterRepetition": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_CHAR_03_CharacterInsertion": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_CHAR_04_CharacterDeletion": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_CHAR_05_HomoglyphPerturbation": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_02_EntityDisambiguation": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 2,
+      "gated_eligible": 2,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_03_Jumbling": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_04_Typos": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_08_LexicalSubstitution": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 4,
+      "gated_eligible": 4,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_12_Synonyms": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 2,
+      "gated_eligible": 2,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_WORD_13_PhoneticPerturbation": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 4,
+      "gated_eligible": 4,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_IMP_01_ImperceptibleVerification": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_OMITOMISSION_01_OmissionGeneration": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 2,
+      "gated_eligible": 2,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_06_FactMixing": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_07_AdvTrigger": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "CA_16_Colloquial": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_ADVADD_01_AdvAdd": {
+      "raw_asr": 1.0,
+      "gated_asr": 1.0,
+      "flips_raw": 5,
+      "flips_gated": 5,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_CLAIMREWRITE_01_ClaimRewrite": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_CTXREP_01_ContextualizedReplace": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_FACT2FICT_01_Fact2Fiction": {
+      "raw_asr": 1.0,
+      "gated_asr": 1.0,
+      "flips_raw": 5,
+      "flips_gated": 5,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    },
+    "EA_IMPRET_01_ImperceptibleRetrieval": {
+      "raw_asr": 1.0,
+      "gated_asr": 1.0,
+      "flips_raw": 5,
+      "flips_gated": 5,
+      "eligible": 5,
+      "gated_eligible": 5,
+      "excluded": 0,
+      "errors": 0
+    }
+  }
+}

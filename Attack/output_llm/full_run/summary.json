@@ -1,0 +1,60 @@
+{
+  "input_rows": 1120,
+  "attacks": 8,
+  "seed": 42,
+  "mock_mode": false,
+  "stats": {
+    "applied": 7731,
+    "skipped": 1229
+  },
+  "per_attack": {
+    "CA_07_AdvTrigger": {
+      "applied": 928,
+      "skipped": 192
+    },
+    "CA_06_FactMixing": {
+      "applied": 996,
+      "skipped": 124
+    },
+    "CA_16_Colloquial": {
+      "applied": 1020,
+      "skipped": 100
+    },
+    "EA_CLAIMREWRITE_01_ClaimRewrite": {
+      "applied": 841,
+      "skipped": 279
+    },
+    "EA_CTXREP_01_ContextualizedReplace": {
+      "applied": 984,
+      "skipped": 136
+    },
+    "EA_ADVADD_01_AdvAdd": {
+      "applied": 1016,
+      "skipped": 104
+    },
+    "EA_FACT2FICT_01_Fact2Fiction": {
+      "applied": 826,
+      "skipped": 294
+    },
+    "EA_IMPRET_01_ImperceptibleRetrieval": {
+      "applied": 1120,
+      "skipped": 0
+    }
+  },
+  "skip_reasons": {
+    "llm_generation_failed": 736,
+    "executor_failed": 35,
+    "nei_claim_not_targeted": 398,
+    "planner_failed": 60
+  },
+  "cache_misses": {
+    "CA_06_FactMixing": 116,
+    "CA_16_Colloquial": 116,
+    "EA_CLAIMREWRITE_01_ClaimRewrite": 116,
+    "EA_CTXREP_01_ContextualizedReplace": 116,
+    "EA_ADVADD_01_AdvAdd": 116,
+    "EA_FACT2FICT_01_Fact2Fiction": 116,
+    "EA_IMPRET_01_ImperceptibleRetrieval": 116,
+    "CA_07_AdvTrigger": 115
+  }
+}

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hindi Fact-Checking Adversarial Attack Benchmark</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --card-border: #E5E7EB;
+            --text-main: #1F2937;
+            --text-sub: #6B7280;
+            --accent-blue: #2563EB;
+            --accent-hover: #1D4ED8;
+            --badge-pos-bg: #ECFDF5;
+            --badge-pos-text: #059669;
+            --badge-pos-border: #A7F3D0;
+            --badge-mid-bg: #FFFBEB;
+            --badge-mid-text: #D97706;
+            --badge-mid-border: #FDE68A;
+            --badge-neg-bg: #FEF2F2;
+            --badge-neg-text: #DC2626;
+            --badge-neg-border: #FCA5A5;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            padding: 24px 16px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 15px;
+            margin-top: 4px;
+        }
+
+        /* Navigation Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid var(--card-border);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 4px;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-blue);
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Titles */
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+
+        .subsection-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-top: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Metric Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 14px 16px;
+        }
+
+        .metric-val {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .metric-lbl {
+            color: var(--text-sub);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* Architecture Cards */
+        .arch-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+        }
+        
+        .arch-number {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+        }
+        
+        .arch-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        
+        .arch-desc {
+            font-size: 13px;
+            color: #4B5563;
+            line-height: 1.4;
+        }
+
+        /* Badges */
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+        .badge-pos { background: var(--badge-pos-bg); color: var(--badge-pos-text); border: 1px solid var(--badge-pos-border); }
+        .badge-mid { background: var(--badge-mid-bg); color: var(--badge-mid-text); border: 1px solid var(--badge-mid-border); }
+        .badge-neg { background: var(--badge-neg-bg); color: var(--badge-neg-text); border: 1px solid var(--badge-neg-border); }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        select, input[type="text"], textarea {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+        }
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 13px;
+        }
+        th {
+            background-color: #F3F4F6;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        /* Diff Box */
+        .diff-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        @media (max-width: 768px) {
+            .diff-container { grid-template-columns: 1fr; }
+        }
+        .diff-card {
+            background-color: var(--card-bg);
+            border-left: 3px solid var(--accent-blue);
+            padding: 12px 14px;
+            border-radius: 4px;
+            border: 1px solid var(--card-border);
+            font-size: 13px;
+        }
+        .diff-card.attacked {
+            border-left-color: var(--badge-neg-text);
+        }
+        .diff-highlight {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="title">Hindi Fact-Checking Adversarial Attack Benchmark</div>
+            <div class="subtitle">Empirical vulnerability assessment and few-shot calibrated feasibility prediction</div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-overview')">Overview & Architecture</button>
+            <button class="tab-btn" onclick="switchTab('tab-explorer')">Ground-Truth Database</button>
+            <button class="tab-btn" onclick="switchTab('tab-predict')">Predict Custom Attack</button>
+            <button class="tab-btn" onclick="switchTab('tab-analytics')">Analytics & Leaderboard</button>
+        </nav>
+
+        <!-- TAB 1: OVERVIEW -->
+        <div id="tab-overview" class="tab-content active">
+            <div class="section-title">System benchmarking summary</div>
+            <div class="metrics-grid">
+                <div class="card">
+                    <div class="metric-val">22</div>
+                    <div class="metric-lbl">Attack vectors</div>
+                </div>
+                <div class="card">
+                    <div class="metric-val">1,120</div>
+                    <div class="metric-lbl">Hindi news rows</div>
+                </div>
+                <div class="card">
+                    <div class="metric-val">86.36%</div>
+                    <div class="metric-lbl">Predictor accuracy</div>
+                </div>
+                <div class="card">
+                    <div class="metric-val">+59.09%</div>
+                    <div class="metric-lbl">Improvement over 5-LLM guessing</div>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top:24px;">Architecture</div>
+            <div class="arch-card">
+                <div class="arch-number">01 Research Layer</div>
+                <div class="arch-title">Empirical Benchmark Execution</div>
+                <div class="arch-desc">Evaluates 1,120 Hindi news claims across 6 domains (Crime, Celebrity, Disasters, Schemes, Health, Politics) against 22 adversarial attack vectors using a 2-layer quality gate.</div>
+            </div>
+            <div class="arch-card">
+                <div class="arch-number">02 Calibration Layer</div>
+                <div class="arch-title">In-Context Few-Shot Calibration</div>
+                <div class="arch-desc">Stores ground-truth empirical success rates (Gated ASR) as calibrated exemplars to train a Leave-One-Out (LOO) cross-validated predictor.</div>
+            </div>
+            <div class="arch-card">
+                <div class="arch-number">03 Prediction Layer</div>
+                <div class="arch-title">Feasibility Inference Engine</div>
+                <div class="arch-desc">Provides zero-latency feasibility prediction (POS / MID / NEG) and confidence bounds for unseen adversarial attack proposals.</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
+                <div class="card">
+                    <div class="subsection-title" style="margin-top:0;">Key findings</div>
+                    <ul style="padding-left: 18px; color: var(--text-sub); font-size: 13px; line-height: 1.6;">
+                        <li><strong>Mechanical noise ineffectiveness:</strong> Character swapping, typos, and homoglyphs achieve &lt;5% Gated ASR. Modern LLMs filter surface noise efficiently.</li>
+                        <li><strong>Semantic poisoning dominance:</strong> Evidence insertion and contextualized replacement (AdvAdd 58.47%, Fact2Fiction 57.60%, Contextualized Replace 59.57%) consistently compromise verification models.</li>
+                        <li><strong>Zero-shot LLM miscalibration:</strong> Generalist models (GPT-4o, Claude 3.5) overestimate mechanical typos while underestimating contextualized evidence replacement.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="subsection-title" style="margin-top:0;">Evaluated domains (1,120 rows total)</div>
+                    <ul style="padding-left: 18px; color: var(--text-sub); font-size: 13px; line-height: 1.6;">
+                        <li>Crime & Public Safety (175 rows)</li>
+                        <li>Celebrity News (189 rows)</li>
+                        <li>Disaster & Breaking News (189 rows)</li>
+                        <li>Government Schemes (189 rows)</li>
+                        <li>Health & Medicine (189 rows)</li>
+                        <li>Politics & Election (189 rows)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: EXPLORER -->
+        <div id="tab-explorer" class="tab-content">
+            <div class="section-title">Ground-truth attack database</div>
+            <div class="card" style="margin-bottom: 16px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; align-items: end;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Attack type:</label>
+                        <select id="filter-type" onchange="renderExplorer()">
+                            <option value="All">All Types</option>
+                            <option value="Rule-based">Rule-based</option>
+                            <option value="LLM-based">LLM-based</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Granularity:</label>
+                        <select id="filter-granularity" onchange="renderExplorer()">
+                            <option value="All">All Granularities</option>
+                            <option value="Character-level">Character-level</option>
+                            <option value="Word-level">Word-level</option>
+                            <option value="Sentence-level">Sentence-level</option>
+                            <option value="Evidence-level">Evidence-level</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Attack technique:</label>
+                        <select id="attack-selector" onchange="onAttackSelected()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selected Attack Metric Header -->
+            <div id="attack-metrics-container" class="metrics-grid"></div>
+
+            <!-- Mechanism Details -->
+            <div id="attack-mechanism-box" class="card" style="margin-bottom: 16px; font-size: 13px;"></div>
+
+            <!-- 5-LLM Comparison Table -->
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="subsection-title" style="margin-top:0;">5-LLM zero-shot prediction vs ground truth</div>
+                <div style="overflow-x: auto;">
+                    <table id="llm-matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Model Name</th>
+                                <th>Prediction</th>
+                                <th>Ground Truth</th>
+                                <th>Evaluation</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real Hindi Sample Viewer -->
+            <div class="card">
+                <div class="subsection-title" style="margin-top:0;">Representative Hindi benchmark sample</div>
+                <div id="sample-diff-container" class="diff-container"></div>
+            </div>
+        </div>
+
+        <!-- TAB 3: PREDICT CUSTOM ATTACK -->
+        <div id="tab-predict" class="tab-content">
+            <div class="section-title">Predict custom attack feasibility</div>
+            <p style="color: var(--text-sub); font-size: 14px; margin-bottom: 16px;">Assess the feasibility of a proposed attack vector using the calibrated few-shot model.</p>
+
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="form-group">
+                    <label>Preset attack proposal:</label>
+                    <select id="preset-selector" onchange="applyPreset()">
+                        <option value="custom">Custom Proposal</option>
+                        <option value="emoji">Emoji Noise Injection in Evidence Passages</option>
+                        <option value="numbers">Replacing Digits with Written Hindi Words in Claim</option>
+                        <option value="negation">Syntactic Negation Removal from Evidence</option>
+                        <option value="agentic">Agentic Synthetic Fake News Report Generator</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label>Attack proposal name:</label>
+                        <input type="text" id="pred-name" value="Emoji Noise Injection">
+                    </div>
+                    <div class="form-group">
+                        <label>Attack type:</label>
+                        <select id="pred-type">
+                            <option value="Rule-based">Rule-based</option>
+                            <option value="LLM-based">LLM-based</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label>Edit granularity:</label>
+                        <select id="pred-granularity">
+                            <option value="Character-level">Character-level</option>
+                            <option value="Word-level">Word-level</option>
+                            <option value="Sentence-level">Sentence-level</option>
+                            <option value="Evidence-level">Evidence-level</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mechanism description:</label>
+                        <input type="text" id="pred-mechanism" value="Inserts random expressive emojis into evidence sentences.">
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="runPrediction()">Run prediction</button>
+            </div>
+
+            <div id="prediction-result-card" class="card" style="display: none;"></div>
+        </div>
+
+        <!-- TAB 4: ANALYTICS -->
+        <div id="tab-analytics" class="tab-content">
+            <div class="section-title">Analytics & LLM leaderboard</div>
+
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="subsection-title" style="margin-top:0;">Attack vulnerability ranking (Gated ASR)</div>
+                <div style="overflow-x: auto;">
+                    <table id="ranking-table">
+                        <thead>
+                            <tr>
+                                <th>Attack Name</th>
+                                <th>Type</th>
+                                <th>Granularity</th>
+                                <th>Gated ASR (%)</th>
+                                <th>Ground Truth</th>
+                                <th>Zero-Shot LLMs</th>
+                                <th>Calibrated Predictor</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="card">
+                    <div class="subsection-title" style="margin-top:0;">Model performance summary</div>
+                    <table>
+                        <thead>
+                            <tr><th>Model</th><th>Accuracy (%)</th><th>Correct Predictions</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Calibrated Predictor</strong></td><td><strong style="color: var(--badge-pos-text);">86.36%</strong></td><td>19 / 22</td></tr>
+                            <tr><td>DeepSeek V3</td><td>72.73%</td><td>16 / 22</td></tr>
+                            <tr><td>Sarvam 2B</td><td>40.91%</td><td>9 / 22</td></tr>
+                            <tr><td>GPT-4o</td><td>27.27%</td><td>6 / 22</td></tr>
+                            <tr><td>Claude 3.5 Sonnet</td><td>27.27%</td><td>6 / 22</td></tr>
+                            <tr><td>Kimi 1.5</td><td>27.27%</td><td>6 / 22</td></tr>
+                            <tr><td>5-LLM Consensus</td><td>27.27%</td><td>6 / 22</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <div class="subsection-title" style="margin-top:0;">Miscalibration patterns</div>
+                    <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 6px;"><strong>Overestimated attacks</strong> (Zero-shot guessed POS, actual NEG &lt;5%):</p>
+                    <ul style="padding-left: 18px; color: var(--badge-neg-text); font-size: 13px; margin-bottom: 12px;">
+                        <li>Character Swapping (1.85% ASR)</li>
+                        <li>Character Deletion (3.30% ASR)</li>
+                        <li>Homoglyph Perturbation (2.75% ASR)</li>
+                        <li>Typos & Misspellings (2.95% ASR)</li>
+                    </ul>
+                    <p style="color: var(--text-sub); font-size: 13px; margin-bottom: 6px;"><strong>Underestimated attacks</strong> (Zero-shot guessed NEG/MID, actual POS &gt;55%):</p>
+                    <ul style="padding-left: 18px; color: var(--badge-pos-text); font-size: 13px;">
+                        <li>Contextualized Evidence Replace (59.57% ASR)</li>
+                        <li>Poisoned Evidence Addition (58.47% ASR)</li>
+                        <li>Agentic Fictional Evidence (57.60% ASR)</li>
+                        <li>Fact Mixing (55.81% ASR)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let globalData = null;
+
+        async function init() {
+            try {
+                const res = await fetch('/api/data');
+                globalData = await res.json();
+                renderExplorer();
+                renderAnalytics();
+            } catch (err) {
+                console.error("Error loading benchmark data:", err);
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function renderExplorer() {
+            if (!globalData || !globalData.calibrated) return;
+            
+            const filterType = document.getElementById('filter-type').value;
+            const filterGran = document.getElementById('filter-granularity').value;
+            
+            const predictions = globalData.calibrated.predictions || [];
+            const filtered = predictions.filter(p => {
+                if (filterType !== 'All' && p.attack_type !== filterType) return false;
+                if (filterGran !== 'All' && p.edit_granularity !== filterGran) return false;
+                return true;
+            });
+
+            const selector = document.getElementById('attack-selector');
+            selector.innerHTML = '';
+            filtered.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.attack_key;
+                opt.textContent = p.attack_name;
+                selector.appendChild(opt);
+            });
+
+            if (filtered.length > 0) {
+                onAttackSelected();
+            }
+        }
+
+        async function onAttackSelected() {
+            const key = document.getElementById('attack-selector').value;
+            if (!key || !globalData) return;
+
+            const item = globalData.calibrated.predictions.find(p => p.attack_key === key);
+            if (!item) return;
+
+            const badgeCls = item.empirical_tier === 'POS' ? 'badge-pos' : (item.empirical_tier === 'MID' ? 'badge-mid' : 'badge-neg');
+
+            // Render Metrics Grid
+            document.getElementById('attack-metrics-container').innerHTML = `
+                <div class="card">
+                    <div class="metric-val">${item.gated_asr_pct}%</div>
+                    <div class="metric-lbl">Gated ASR (Ground truth)</div>
+                </div>
+                <div class="card">
+                    <div style="margin-top:2px;"><span class="badge ${badgeCls}">${item.empirical_tier} TIER</span></div>
+                    <div class="metric-lbl" style="margin-top:12px;">Vulnerability tier</div>
+                </div>
+                <div class="card">
+                    <div class="metric-val" style="font-size:18px;">${item.attack_type}</div>
+                    <div class="metric-lbl">Attack type</div>
+                </div>
+                <div class="card">
+                    <div class="metric-val" style="font-size:18px;">${item.edit_granularity}</div>
+                    <div class="metric-lbl">Granularity</div>
+                </div>
+            `;
+
+            // Render Mechanism
+            document.getElementById('attack-mechanism-box').innerHTML = `
+                <strong style="color:var(--text-main);">Operational mechanism:</strong> ${item.mechanism}
+            `;
+
+            // Render 5-LLM Table
+            const llmRow = (globalData.llm_comparison || []).find(r => r.attack_key === key);
+            const tbody = document.querySelector('#llm-matrix-table tbody');
+            tbody.innerHTML = '';
+
+            if (llmRow) {
+                const models = [
+                    { name: 'GPT-4o', pred: llmRow.gpt4o_pred, corr: llmRow.gpt4o_correct === 'True' || llmRow.gpt4o_correct === true },
+                    { name: 'Claude 3.5 Sonnet', pred: llmRow.claude_pred, corr: llmRow.claude_correct === 'True' || llmRow.claude_correct === true },
+                    { name: 'DeepSeek V3', pred: llmRow.deepseek_pred, corr: llmRow.deepseek_correct === 'True' || llmRow.deepseek_correct === true },
+                    { name: 'Kimi 1.5', pred: llmRow.kimi_pred, corr: llmRow.kimi_correct === 'True' || llmRow.kimi_correct === true },
+                    { name: 'Sarvam 2B', pred: llmRow.sarvam_pred, corr: llmRow.sarvam_correct === 'True' || llmRow.sarvam_correct === true },
+                    { name: '5-LLM Consensus', pred: llmRow.consensus_pred, corr: llmRow.consensus_correct === 'True' || llmRow.consensus_correct === true },
+                    { name: 'Calibrated Predictor', pred: item.calibrated_pred, corr: item.calibrated_correct }
+                ];
+
+                models.forEach(m => {
+                    const tr = document.createElement('tr');
+                    const statusText = m.corr ? 'Correct' : (m.pred === 'POS' && item.empirical_tier === 'NEG' ? 'Overestimated' : 'Incorrect');
+                    tr.innerHTML = `
+                        <td><strong>${m.name}</strong></td>
+                        <td><code>${m.pred}</code></td>
+                        <td><code>${item.empirical_tier}</code></td>
+                        <td>${statusText}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Fetch Real Hindi Sample
+            try {
+                const res = await fetch(`/api/sample?key=${key}`);
+                const sample = await res.json();
+                
+                const sampleContainer = document.getElementById('sample-diff-container');
+                if (sample && !sample.error) {
+                    sampleContainer.innerHTML = `
+                        <div class="diff-card">
+                            <strong>Original clean input</strong><br><br>
+                            <strong>Claim:</strong> ${sample.original_claim || 'N/A'}<br><br>
+                            <strong>Evidence:</strong> ${(sample.original_evidence || 'N/A').substring(0, 240)}...<br><br>
+                            <strong>Gold label:</strong> <code>${sample.gold_label || 'N/A'}</code>
+                        </div>
+                        <div class="diff-card attacked">
+                            <strong>Adversarial attacked input</strong><br><br>
+                            <strong>Attacked claim:</strong> <span class="diff-highlight">${sample.adversarial_claim || 'N/A'}</span><br><br>
+                            <strong>Attacked evidence:</strong> ${(sample.adversarial_evidence || 'Original text unchanged').substring(0, 240)}...<br><br>
+                            <strong>Verifier verdict:</strong> <code>${sample.verdict || 'N/A'}</code> (Flipped: <code>${sample.flipped}</code>)
+                        </div>
+                    `;
+                } else {
+                    sampleContainer.innerHTML = `<p style="color:var(--text-sub);">Sample CSV preview unavailable.</p>`;
+                }
+            } catch (err) {
+                console.error("Error loading sample:", err);
+            }
+        }
+
+        function applyPreset() {
+            const p = document.getElementById('preset-selector').value;
+            const nameEl = document.getElementById('pred-name');
+            const typeEl = document.getElementById('pred-type');
+            const granEl = document.getElementById('pred-granularity');
+            const mechEl = document.getElementById('pred-mechanism');
+
+            if (p === 'emoji') {
+                nameEl.value = 'Emoji Noise Injection';
+                typeEl.value = 'Rule-based';
+                granEl.value = 'Character-level';
+                mechEl.value = 'Inserts random expressive emojis into evidence sentences.';
+            } else if (p === 'numbers') {
+                nameEl.value = 'Number-to-Words Conversion';
+                typeEl.value = 'Rule-based';
+                granEl.value = 'Word-level';
+                mechEl.value = 'Converts numerical digits to written Hindi words.';
+            } else if (p === 'negation') {
+                nameEl.value = 'Negation Stripping';
+                typeEl.value = 'Rule-based';
+                granEl.value = 'Evidence-level';
+                mechEl.value = 'Deletes negation words like नहीं, न from evidence text.';
+            } else if (p === 'agentic') {
+                nameEl.value = 'Synthetic News Fabricator';
+                typeEl.value = 'LLM-based';
+                granEl.value = 'Evidence-level';
+                mechEl.value = 'Uses LLMs to generate synthetic news reports asserting counter-facts.';
+            }
+        }
+
+        async function runPrediction() {
+            const name = document.getElementById('pred-name').value;
+            const type = document.getElementById('pred-type').value;
+            const granularity = document.getElementById('pred-granularity').value;
+            const mechanism = document.getElementById('pred-mechanism').value;
+
+            try {
+                const res = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, type, granularity, mechanism })
+                });
+                const result = await res.json();
+
+                const card = document.getElementById('prediction-result-card');
+                card.style.display = 'block';
+                const badgeCls = result.pred_tier === 'POS' ? 'badge-pos' : (result.pred_tier === 'MID' ? 'badge-mid' : 'badge-neg');
+
+                card.innerHTML = `
+                    <div class="subsection-title" style="margin-top:0;">Prediction results for "${result.name}"</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="card">
+                            <div class="metric-lbl">Predicted feasibility tier</div>
+                            <div style="margin: 8px 0;"><span class="badge ${badgeCls}" style="font-size: 14px;">${result.pred_tier} TIER</span></div>
+                            <div style="color: var(--text-sub); font-size: 13px;">${result.tier_explanation}</div>
+                        </div>
+                        <div class="card">
+                            <div class="metric-lbl">Predictor confidence</div>
+                            <div style="font-size: 15px; color: var(--text-main); margin-top: 4px; font-weight: 600;">
+                                Accuracy confidence: ${result.accuracy_confidence}
+                            </div>
+                            <p style="color: var(--text-sub); font-size: 13px; margin-top: 4px;">
+                                ${result.reasoning}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            } catch (err) {
+                console.error("Prediction error:", err);
+            }
+        }
+
+        function renderAnalytics() {
+            if (!globalData || !globalData.calibrated) return;
+            const list = [...globalData.calibrated.predictions].sort((a, b) => b.gated_asr_pct - a.gated_asr_pct);
+            const tbody = document.querySelector('#ranking-table tbody');
+            tbody.innerHTML = '';
+
+            list.forEach(p => {
+                const tr = document.createElement('tr');
+                const badgeCls = p.empirical_tier === 'POS' ? 'badge-pos' : (p.empirical_tier === 'MID' ? 'badge-mid' : 'badge-neg');
+                tr.innerHTML = `
+                    <td><strong>${p.attack_name}</strong></td>
+                    <td>${p.attack_type}</td>
+                    <td>${p.edit_granularity}</td>
+                    <td><strong>${p.gated_asr_pct}%</strong></td>
+                    <td><span class="badge ${badgeCls}">${p.empirical_tier}</span></td>
+                    <td><code>${p.raw_zero_shot_pred}</code></td>
+                    <td><code>${p.calibrated_pred}</code></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

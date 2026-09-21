@@ -1,0 +1,226 @@
+{
+  "baseline_accuracy": 0.7428571428571429,
+  "baseline_failures": 288,
+  "per_attack": {
+    "CA_03_LexicallyInformed": {
+      "raw_asr": 0.024464831804281346,
+      "gated_asr": 0.013910355486862442,
+      "flips_raw": 16,
+      "flips_gated": 9,
+      "eligible": 654,
+      "gated_eligible": 647,
+      "excluded": 7,
+      "errors": 8
+    },
+    "CA_CHAR_01_CharacterSwapping": {
+      "raw_asr": 0.07240948813982521,
+      "gated_asr": 0.018494055482166448,
+      "flips_raw": 58,
+      "flips_gated": 14,
+      "eligible": 801,
+      "gated_eligible": 757,
+      "excluded": 44,
+      "errors": 31
+    },
+    "CA_CHAR_02_CharacterRepetition": {
+      "raw_asr": 0.03787878787878788,
+      "gated_asr": 0.02457757296466974,
+      "flips_raw": 25,
+      "flips_gated": 16,
+      "eligible": 660,
+      "gated_eligible": 651,
+      "excluded": 9,
+      "errors": 153
+    },
+    "CA_CHAR_03_CharacterInsertion": {
+      "raw_asr": 0.043478260869565216,
+      "gated_asr": 0.03629536921151439,
+      "flips_raw": 35,
+      "flips_gated": 29,
+      "eligible": 805,
+      "gated_eligible": 799,
+      "excluded": 6,
+      "errors": 8
+    },
+    "CA_CHAR_04_CharacterDeletion": {
+      "raw_asr": 0.07732634338138926,
+      "gated_asr": 0.03296703296703297,
+      "flips_raw": 59,
+      "flips_gated": 24,
+      "eligible": 763,
+      "gated_eligible": 728,
+      "excluded": 35,
+      "errors": 50
+    },
+    "CA_CHAR_05_HomoglyphPerturbation": {
+      "raw_asr": 0.03125,
+      "gated_asr": 0.027450980392156862,
+      "flips_raw": 24,
+      "flips_gated": 21,
+      "eligible": 768,
+      "gated_eligible": 765,
+      "excluded": 3,
+      "errors": 64
+    },
+    "CA_WORD_02_EntityDisambiguation": {
+      "raw_asr": 0.0,
+      "gated_asr": 0.0,
+      "flips_raw": 0,
+      "flips_gated": 0,
+      "eligible": 41,
+      "gated_eligible": 41,
+      "excluded": 0,
+      "errors": 5
+    },
+    "CA_WORD_03_Jumbling": {
+      "raw_asr": 0.12566137566137567,
+      "gated_asr": 0.12566137566137567,
+      "flips_raw": 95,
+      "flips_gated": 95,
+      "eligible": 756,
+      "gated_eligible": 756,
+      "excluded": 0,
+      "errors": 76
+    },
+    "CA_WORD_04_Typos": {
+      "raw_asr": 0.03443877551020408,
+      "gated_asr": 0.029487179487179487,
+      "flips_raw": 27,
+      "flips_gated": 23,
+      "eligible": 784,
+      "gated_eligible": 780,
+      "excluded": 4,
+      "errors": 45
+    },
+    "CA_WORD_08_LexicalSubstitution": {
+      "raw_asr": 0.029508196721311476,
+      "gated_asr": 0.02471169686985173,
+      "flips_raw": 18,
+      "flips_gated": 15,
+      "eligible": 610,
+      "gated_eligible": 607,
+      "excluded": 3,
+      "errors": 27
+    },
+    "CA_WORD_12_Synonyms": {
+      "raw_asr": 0.047337278106508875,
+      "gated_asr": 0.03592814371257485,
+      "flips_raw": 8,
+      "flips_gated": 6,
+      "eligible": 169,
+      "gated_eligible": 167,
+      "excluded": 2,
+      "errors": 15
+    },
+    "CA_WORD_13_PhoneticPerturbation": {
+      "raw_asr": 0.03747870528109029,
+      "gated_asr": 0.032534246575342464,
+      "flips_raw": 22,
+      "flips_gated": 19,
+      "eligible": 587,
+      "gated_eligible": 584,
+      "excluded": 3,
+      "errors": 52
+    },
+    "EA_IMP_01_ImperceptibleVerification": {
+      "raw_asr": 0.032467532467532464,
+      "gated_asr": 0.004010695187165776,
+      "flips_raw": 25,
+      "flips_gated": 3,
+      "eligible": 770,
+      "gated_eligible": 748,
+      "excluded": 22,
+      "errors": 62
+    },
+    "EA_OMITOMISSION_01_OmissionGeneration": {
+      "raw_asr": 0.21722846441947566,
+      "gated_asr": 0.19615384615384615,
+      "flips_raw": 58,
+      "flips_gated": 51,
+      "eligible": 267,
+      "gated_eligible": 260,
+      "excluded": 7,
+      "errors": 21
+    },
+    "CA_06_FactMixing": {
+      "raw_asr": 0.5982404692082112,
+      "gated_asr": 0.5580645161290323,
+      "flips_raw": 408,
+      "flips_gated": 346,
+      "eligible": 682,
+      "gated_eligible": 620,
+      "excluded": 62,
+      "errors": 62
+    },
+    "CA_07_AdvTrigger": {
+      "raw_asr": 0.18253968253968253,
+      "gated_asr": 0.04275092936802974,
+      "flips_raw": 115,
+      "flips_gated": 23,
+      "eligible": 630,
+      "gated_eligible": 538,
+      "excluded": 92,
+      "errors": 62
+    },
+    "CA_16_Colloquial": {
+      "raw_asr": 0.0380818053596615,
+      "gated_asr": 0.024320457796852647,
+      "flips_raw": 27,
+      "flips_gated": 17,
+      "eligible": 709,
+      "gated_eligible": 699,
+      "excluded": 10,
+      "errors": 52
+    },
+    "EA_ADVADD_01_AdvAdd": {
+      "raw_asr": 0.6099585062240664,
+      "gated_asr": 0.5846833578792342,
+      "flips_raw": 441,
+      "flips_gated": 397,
+      "eligible": 723,
+      "gated_eligible": 679,
+      "excluded": 44,
+      "errors": 35
+    },
+    "EA_CLAIMREWRITE_01_ClaimRewrite": {
+      "raw_asr": 0.28486646884273,
+      "gated_asr": 0.25386996904024767,
+      "flips_raw": 192,
+      "flips_gated": 164,
+      "eligible": 674,
+      "gated_eligible": 646,
+      "excluded": 28,
+      "errors": 33
+    },
+    "EA_CTXREP_01_ContextualizedReplace": {
+      "raw_asr": 0.6351550960118169,
+      "gated_asr": 0.5957446808510638,
+      "flips_raw": 430,
+      "flips_gated": 364,
+      "eligible": 677,
+      "gated_eligible": 611,
+      "excluded": 66,
+      "errors": 56
+    },
+    "EA_FACT2FICT_01_Fact2Fiction": {
+      "raw_asr": 0.613251155624037,
+      "gated_asr": 0.5760135135135135,
+      "flips_raw": 398,
+      "flips_gated": 341,
+      "eligible": 649,
+      "gated_eligible": 592,
+      "excluded": 57,
+      "errors": 46
+    },
+    "EA_IMPRET_01_ImperceptibleRetrieval": {
+      "raw_asr": 0.026615969581749048,
+      "gated_asr": 0.0025974025974025974,
+      "flips_raw": 21,
+      "flips_gated": 2,
+      "eligible": 789,
+      "gated_eligible": 770,
+      "excluded": 19,
+      "errors": 43
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "input_rows": 1120,
+  "attacks": 14,
+  "seed": 42,
+  "stats": {
+    "applied": 12194,
+    "skipped": 3486
+  },
+  "per_attack": {
+    "CA_CHAR_01_CharacterSwapping": {
+      "applied": 1120,
+      "skipped": 0
+    },
+    "CA_CHAR_02_CharacterRepetition": {
+      "applied": 1096,
+      "skipped": 24
+    },
+    "CA_CHAR_03_CharacterInsertion": {
+      "applied": 1096,
+      "skipped": 24
+    },
+    "CA_CHAR_04_CharacterDeletion": {
+      "applied": 1096,
+      "skipped": 24
+    },
+    "CA_CHAR_05_HomoglyphPerturbation": {
+      "applied": 1120,
+      "skipped": 0
+    },
+    "CA_WORD_02_EntityDisambiguation": {
+      "applied": 71,
+      "skipped": 1049
+    },
+    "CA_WORD_03_Jumbling": {
+      "applied": 1120,
+      "skipped": 0
+    },
+    "CA_WORD_04_Typos": {
+      "applied": 1114,
+      "skipped": 6
+    },
+    "CA_WORD_08_LexicalSubstitution": {
+      "applied": 843,
+      "skipped": 277
+    },
+    "CA_WORD_12_Synonyms": {
+      "applied": 290,
+      "skipped": 830
+    },
+    "CA_WORD_13_PhoneticPerturbation": {
+      "applied": 869,
+      "skipped": 251
+    },
+    "CA_03_LexicallyInformed": {
+      "applied": 877,
+      "skipped": 243
+    },
+    "EA_IMP_01_ImperceptibleVerification": {
+      "applied": 1120,
+      "skipped": 0
+    },
+    "EA_OMITOMISSION_01_OmissionGeneration": {
+      "applied": 362,
+      "skipped": 758
+    }
+  },
+  "skip_reasons": {
+    "no_ambiguity_found": 1049,
+    "no_adjectives_found": 830,
+    "no_deletable_construct": 758,
+    "no_applicable_words": 257,
+    "no_applicable_candidates": 520,
+    "no_valid_repetition_candidate": 24,
+    "no_valid_insertion_candidate": 24,
+    "no_valid_deletion_candidate": 24
+  }
+}

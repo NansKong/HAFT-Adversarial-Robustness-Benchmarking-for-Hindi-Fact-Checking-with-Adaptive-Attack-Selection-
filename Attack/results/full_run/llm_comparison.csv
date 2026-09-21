@@ -1,0 +1,23 @@
+﻿attack_key,attack_name,attack_type,edit_granularity,raw_asr_pct,gated_asr_pct,empirical_tier,gpt4o_pred,claude_pred,deepseek_pred,kimi_pred,sarvam_pred,consensus_pred,gpt4o_correct,claude_correct,deepseek_correct,kimi_correct,sarvam_correct,consensus_correct
+CA_CHAR_01_CharacterSwapping,Character Swapping,Rule-based,Character-level,7.24,1.85,NEG,POS,POS,MID,POS,POS,POS,False,False,False,False,False,False
+CA_CHAR_02_CharacterRepetition,Character Repetition,Rule-based,Character-level,3.79,2.46,NEG,MID,POS,NEG,MID,POS,MID,False,False,True,False,False,False
+CA_CHAR_03_CharacterInsertion,Character Insertion,Rule-based,Character-level,4.35,3.63,NEG,POS,MID,NEG,POS,MID,MID,False,False,True,False,False,False
+CA_CHAR_04_CharacterDeletion,Character Deletion,Rule-based,Character-level,7.73,3.3,NEG,POS,POS,MID,POS,POS,POS,False,False,False,False,False,False
+CA_CHAR_05_HomoglyphPerturbation,Homoglyph Perturbation,Rule-based,Character-level,3.12,2.75,NEG,POS,POS,POS,POS,POS,POS,False,False,False,False,False,False
+CA_WORD_02_EntityDisambiguation,Entity Disambiguation,Rule-based,Word-level,0.0,0.0,NEG,MID,MID,NEG,MID,NEG,MID,False,False,True,False,True,False
+CA_WORD_03_Jumbling,Word Jumbling,Rule-based,Word-level,12.57,12.57,NEG,MID,POS,NEG,MID,POS,MID,False,False,True,False,False,False
+CA_WORD_04_Typos,Typos & Misspellings,Rule-based,Word-level,3.44,2.95,NEG,POS,POS,MID,POS,POS,POS,False,False,False,False,False,False
+CA_WORD_08_LexicalSubstitution,Lexical Substitution,Rule-based,Word-level,2.95,2.47,NEG,MID,MID,NEG,MID,MID,MID,False,False,True,False,False,False
+CA_WORD_12_Synonyms,Synonym Replacement,Rule-based,Word-level,4.73,3.59,NEG,MID,MID,NEG,MID,NEG,MID,False,False,True,False,True,False
+CA_WORD_13_PhoneticPerturbation,Phonetic Perturbation,Rule-based,Word-level,3.75,3.25,NEG,POS,POS,MID,POS,POS,POS,False,False,False,False,False,False
+CA_03_LexicallyInformed,Lexically Informed Rewrite,Rule-based,Sentence-level,2.45,1.39,NEG,MID,MID,NEG,MID,NEG,MID,False,False,True,False,True,False
+EA_IMP_01_ImperceptibleVerification,Imperceptible Verification Noise,Rule-based,Evidence-level,3.25,0.4,NEG,MID,POS,NEG,MID,MID,MID,False,False,True,False,False,False
+EA_OMITOMISSION_01_OmissionGeneration,Syntactic Omission,Rule-based,Evidence-level,21.72,19.62,MID,MID,MID,MID,MID,NEG,MID,True,True,True,True,False,True
+CA_06_FactMixing,Fact Mixing,LLM-based,Sentence-level,59.82,55.81,POS,POS,POS,POS,POS,POS,POS,True,True,True,True,True,True
+CA_07_AdvTrigger,Adversarial Trigger Ingestion,LLM-based,Sentence-level,18.25,4.28,NEG,POS,POS,MID,POS,POS,POS,False,False,False,False,False,False
+CA_16_Colloquial,Colloquial Rephrasing,LLM-based,Sentence-level,3.81,2.43,NEG,MID,POS,NEG,MID,POS,MID,False,False,True,False,False,False
+EA_ADVADD_01_AdvAdd,Poisoned Evidence Addition,LLM-based,Evidence-level,61.0,58.47,POS,POS,POS,POS,POS,POS,POS,True,True,True,True,True,True
+EA_CLAIMREWRITE_01_ClaimRewrite,Masked Token Claim Rewrite,LLM-based,Sentence-level,28.49,25.39,MID,MID,MID,MID,MID,MID,MID,True,True,True,True,True,True
+EA_CTXREP_01_ContextualizedReplace,Contextualized Evidence Replace,LLM-based,Evidence-level,63.52,59.57,POS,POS,POS,POS,POS,POS,POS,True,True,True,True,True,True
+EA_FACT2FICT_01_Fact2Fiction,Agentic Fictional Evidence,LLM-based,Evidence-level,61.33,57.6,POS,POS,POS,POS,POS,POS,POS,True,True,True,True,True,True
+EA_IMPRET_01_ImperceptibleRetrieval,Imperceptible Retrieval Noise,LLM-based,Evidence-level,2.66,0.26,NEG,MID,MID,NEG,MID,NEG,MID,False,False,True,False,True,False

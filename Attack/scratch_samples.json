@@ -1,0 +1,90 @@
+[
+  {
+    "attack_name": "CA_CHAR_01_CharacterSwapping",
+    "row_id": 2,
+    "original_claim": "17 जून 2026 तक अरुणाचल प्रदेश में जल जीवन मिशन के अंतर्गत ग्रामीण नल जल कवरेज 100 प्रतिशत था।",
+    "adversarial_claim": "17 जून 2206 तक अरुणाचल प्रदेश में जल जीवन मिशन के अंतर्गत ग्रामीण नल जल कवरेज 100 प्रतिशत था।",
+    "gold_label": "SUP",
+    "verdict": "REF",
+    "flipped": true,
+    "fluency": "nan",
+    "meaning_preserved": "nan"
+  },
+  {
+    "attack_name": "CA_CHAR_05_HomoglyphPerturbation",
+    "row_id": 22,
+    "original_claim": "गांव में केवल कुछ ही दुकानें खुली थीं।",
+    "adversarial_claim": "गांव में केवल कुछ ही दुकानें खुली थी​ं।",
+    "gold_label": "SUP",
+    "verdict": "NEI",
+    "flipped": true,
+    "fluency": "nan",
+    "meaning_preserved": "nan"
+  },
+  {
+    "attack_name": "CA_WORD_04_Typos",
+    "row_id": 22,
+    "original_claim": "गांव में केवल कुछ ही दुकानें खुली थीं।",
+    "adversarial_claim": "गांव मेंं केवल कुछ ही दुकानें खुली थीं।",
+    "gold_label": "SUP",
+    "verdict": "NEI",
+    "flipped": true,
+    "fluency": "nan",
+    "meaning_preserved": "nan"
+  },
+  {
+    "attack_name": "CA_WORD_12_Synonyms",
+    "row_id": 82,
+    "original_claim": "भारतीय वायुसेना ने उसी समय सभी फंसे श्रमिकों को हेलीकॉप्टर से सुरक्षित निकाल लिया था।",
+    "adversarial_claim": "भारतीय वायुसेना ने उसी समय सभी फंसे श्रमिकों को हेलीकॉप्टर से संरक्षित निकाल लिया था।",
+    "gold_label": "NEI",
+    "verdict": "REF",
+    "flipped": true,
+    "fluency": "5.0",
+    "meaning_preserved": "True"
+  },
+  {
+    "attack_name": "CA_WORD_03_Jumbling",
+    "row_id": 13,
+    "original_claim": "व्यासी जल विद्युत परियोजना, ढालीपुर, ढकरानी और कुल्हाल जल विद्युत गृह में बिजली उत्पादन पूरी तरह बंद हो गया।",
+    "adversarial_claim": "बंद परियोजना, ढालीपुर, हो बिजली में तरह गया। उत्पादन जल विद्युत और ढकरानी विद्युत गृह पूरी जल कुल्हाल व्यासी",
+    "gold_label": "SUP",
+    "verdict": "REF",
+    "flipped": true,
+    "fluency": "nan",
+    "meaning_preserved": "nan"
+  },
+  {
+    "attack_name": "CA_06_FactMixing",
+    "row_id": 12,
+    "original_claim": "एफडीए ने ई-सिगरेट को धूम्रपान छोड़ने की स्वीकृत दवा के रूप में मंजूरी दी है।",
+    "adversarial_claim": "I’m sorry, but I can’t help with that.",
+    "gold_label": "REF",
+    "verdict": "NEI",
+    "flipped": true,
+    "fluency": "1.0",
+    "meaning_preserved": "False"
+  },
+  {
+    "attack_name": "CA_16_Colloquial",
+    "row_id": 48,
+    "original_claim": "झारखंड सरकार ने प्राकृतिक आपदाओं के कारण पूरे राज्य में स्कूल एक महीने के लिए बंद करने की घोषणा की।",
+    "adversarial_claim": "Jharkhand govt ne announce kiya hai ki natural disasters ki wajah se poore state ke schools ek mahine ke liye band rahenge.",
+    "gold_label": "NEI",
+    "verdict": "REF",
+    "flipped": true,
+    "fluency": "3.0",
+    "meaning_preserved": "True"
+  },
+  {
+    "attack_name": "CA_07_AdvTrigger",
+    "row_id": 235,
+    "original_claim": "खसरा केवल पांच वर्ष से कम उम्र के बच्चों को हो सकता है।",
+    "adversarial_claim": "यह सही नहीं है कि खसरा केवल पांच वर्ष से कम उम्र के बच्चों को हो सकता है।",
+    "gold_label": "REF",
+    "verdict": "SUP",
+    "flipped": true,
+    "fluency": "5.0",
+    "meaning_preserved": "True"
+  }
+]
