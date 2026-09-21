@@ -1,0 +1,532 @@
+[
+  {
+    "attack_id": "CA-01",
+    "name": "Model-targeting",
+    "claude_pred": "Mid",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA-02",
+    "name": "Dataset Bias",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA-03 *",
+    "name": "Lexically-informed",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-04",
+    "name": "Controversy",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-05",
+    "name": "SubsetNum",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-06 *",
+    "name": "Fact Mixing",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-07 *",
+    "name": "Adv. Trigger",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Split/No Majority"
+  },
+  {
+    "attack_id": "CA-08",
+    "name": "NotClear",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-09",
+    "name": "FiniteSet",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-10",
+    "name": "NotEnoughInfo Add",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-11",
+    "name": "Conjunction",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-12",
+    "name": "Add. Unver.",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA-13",
+    "name": "Game-play",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA-14",
+    "name": "Multi-hop",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "-",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-15",
+    "name": "Multi-hop Temp.",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "-",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-16 *",
+    "name": "Colloquial",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-WORD-01",
+    "name": "EntityLess",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA-WORD-02 *",
+    "name": "Entity Disambiguation (En",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA-WORD-03",
+    "name": "EntityLinking",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA_CHAR_01_Character *",
+    "name": "Character Swapping",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_CHAR_02_Character *",
+    "name": "Character Repetition",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_CHAR_03_Character *",
+    "name": "Character Insertion",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_CHAR_04_Character *",
+    "name": "Character Deletion",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Neg",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_CHAR_05_Homoglyph *",
+    "name": "Homoglyph Perturbation",
+    "claude_pred": "Mid",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Mid",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_CHAR_06_LEETPertu",
+    "name": "LEET Perturbation",
+    "claude_pred": "Mid",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Neg",
+    "sarvam_pred": "Neg",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA_WORD_01_DateManip",
+    "name": "Date Manipulation",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_02_Contracti",
+    "name": "Contractions",
+    "claude_pred": "Neg",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Neg",
+    "sarvam_pred": "Neg",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_03_Jumbling *",
+    "name": "Jumbling",
+    "claude_pred": "Mid",
+    "openai_pred": "Unexp",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Neg",
+    "sarvam_pred": "Mid",
+    "consensus": "Split/No Majority"
+  },
+  {
+    "attack_id": "CA_WORD_04_Typos *",
+    "name": "Typos",
+    "claude_pred": "Mid",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_WORD_05_RepeatPhr",
+    "name": "Repeat Phrases",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_06_WordRepet",
+    "name": "Word Repetition",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_07_Tautology",
+    "name": "Tautology",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_08_LexicalSu *",
+    "name": "Lexical Substitution",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_WORD_09_Expansion",
+    "name": "Expansions",
+    "claude_pred": "Neg",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Neg",
+    "sarvam_pred": "Neg",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_10_NumToWord",
+    "name": "Num To Words",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "CA_WORD_11_SubjectVe",
+    "name": "Subject Verb Disagreement",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "CA_WORD_12_Synonyms *",
+    "name": "Synonyms",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Mid",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "CA_WORD_13_PhoneticP *",
+    "name": "Phonetic Perturbation",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-ADVADD-01 *",
+    "name": "AdvAdd (Claim-Conditioned",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-ADVMOD-01",
+    "name": "AdvMod (Real-Time PEGASUS",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Mid",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "EA-CLAIMREWRITE-01 *",
+    "name": "Claim-Aligned Re-Writing",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-CLAIMREWRITERET-0",
+    "name": "Claim-Aligned Re-Writing",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "EA-CTXREP-01 *",
+    "name": "Contextualized Replace Ev",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Neg",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-FACT2FICT-01 *",
+    "name": "Fact2Fiction Targeted Age",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-IMP-01 *",
+    "name": "Imperceptible Character-L",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Mid",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-IMPRET-01 *",
+    "name": "Imperceptible Character-L",
+    "claude_pred": "Pos",
+    "openai_pred": "Neg",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Mid",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-LEXVAR-01",
+    "name": "Lexical Variation Evidenc",
+    "claude_pred": "Mid",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Mid",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "EA-NEUTNOISE-01",
+    "name": "Neutral Noise Document In",
+    "claude_pred": "Pos",
+    "openai_pred": "Mid",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "EA-OMITOMISSION-01 *",
+    "name": "Omission Generation Attac",
+    "claude_pred": "Pos",
+    "openai_pred": "Unexp",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Pos",
+    "consensus": "Majority 3/5"
+  },
+  {
+    "attack_id": "EA-OMITPARA-01",
+    "name": "Omitting Paraphrase Attac",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Mid",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "EA-SUPGEN-01",
+    "name": "Supporting Generation Att",
+    "claude_pred": "Mid",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Mid",
+    "kimi_pred": "Mid",
+    "sarvam_pred": "Mid",
+    "consensus": "Strong 4/5"
+  },
+  {
+    "attack_id": "PA-DATASET-01",
+    "name": "Symmetric",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  },
+  {
+    "attack_id": "PA-DATASET-02",
+    "name": "GPT-4 Symmetric",
+    "claude_pred": "Pos",
+    "openai_pred": "Pos",
+    "deepseek_pred": "Pos",
+    "kimi_pred": "Pos",
+    "sarvam_pred": "Pos",
+    "consensus": "Full 5/5"
+  }
+]

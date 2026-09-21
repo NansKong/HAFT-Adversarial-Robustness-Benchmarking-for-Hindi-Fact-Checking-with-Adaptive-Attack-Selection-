@@ -1,0 +1,32 @@
+Rank,Attack ID,Attack Name,Predicted Feasibility Tier,Estimated Success Prob,Execution Feasibility Scope,5-LLM Survey Consensus,Spot-Check Priority
+1,CA-14,Multi-hop,MID,0.35,Untestable (Multi-evidence schema),Majority 3/5,Medium
+2,CA-15,Multi-hop Temp.,MID,0.35,Untestable (Multi-evidence schema),Majority 3/5,Medium
+3,CA-01,Model-targeting,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+4,CA-02,Dataset Bias,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+5,CA-04,Controversy,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+6,CA-05,SubsetNum,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+7,CA-08,NotClear,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+8,CA-09,FiniteSet,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+9,CA-10,NotEnoughInfo Add,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+10,CA-11,Conjunction,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+11,CA-12,Add. Unver.,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+12,CA-13,Game-play,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+13,CA-WORD-01,EntityLess,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+14,CA-WORD-03,EntityLinking,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+15,CA_CHAR_06_LEETPertu,LEET Perturbation,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+16,CA_WORD_01_DateManip,Date Manipulation,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+17,CA_WORD_02_Contracti,Contractions,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+18,CA_WORD_05_RepeatPhr,Repeat Phrases,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+19,CA_WORD_06_WordRepet,Word Repetition,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+20,CA_WORD_07_Tautology,Tautology,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+21,CA_WORD_09_Expansion,Expansions,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+22,CA_WORD_10_NumToWord,Num To Words,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+23,CA_WORD_11_SubjectVe,Subject Verb Disagreement,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+24,EA-ADVMOD-01,AdvMod (Real-Time PEGASUS,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+25,EA-CLAIMREWRITERET-0,Claim-Aligned Re-Writing,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+26,EA-LEXVAR-01,Lexical Variation Evidenc,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+27,EA-NEUTNOISE-01,Neutral Noise Document In,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+28,EA-OMITPARA-01,Omitting Paraphrase Attac,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+29,EA-SUPGEN-01,Supporting Generation Att,MID,0.22,Testable (Textual Perturbation),Strong 4/5,Medium
+30,PA-DATASET-01,Symmetric,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium
+31,PA-DATASET-02,GPT-4 Symmetric,MID,0.22,Testable (Textual Perturbation),Full 5/5,Medium

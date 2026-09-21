@@ -1,0 +1,97 @@
+# ==============================================================================
+# HAFT Stage 2: Central Configuration
+# Reinforcement Learning & Knowledge Graph Layer for Hindi Fact-Checking
+# ==============================================================================
+
+project:
+  name: "HAFT-Stage2"
+  version: "2.0.0"
+  device: "cpu"  # "cuda" if available, falls back to "cpu"
+  seed: 42
+  seeds: [42, 43, 44, 45, 46]
+
+paths:
+  base_dir: "e:/Attack/Attack"
+  dataset_csv: "e:/Attack/Attack/sampled_dataset_1120.csv"
+  results_dir: "e:/Attack/Attack/results/full_run"
+  summary_json: "e:/Attack/Attack/results/full_run/summary.json"
+  llm_comparison_csv: "e:/Attack/Attack/results/full_run/llm_comparison.csv"
+  calibrated_predictions_json: "e:/Attack/Attack/results/full_run/calibrated_predictions.json"
+  embeddings_cache: "e:/Attack/Attack/data/claim_embeddings_indicbert_1120.pt"
+  master_kb_json: "e:/Attack/Attack/data/master_attack_kb_53.json"
+  stage2_results_dir: "e:/Attack/Attack/results/stage2"
+
+dataset:
+  total_claims: 1120
+  baseline_success_claims: 832
+  baseline_failure_claims: 288
+  domains:
+    - "Crime_public_safety"
+    - "Celebrity_News"
+    - "Disaster_BreakingNews"
+    - "Government_Schemes"
+    - "Health_Medicine"
+    - "Politics_and_Election"
+  labels: ["SUP", "REF", "NEI"]
+
+embeddings:
+  model_name: "ai4bharat/IndicBERTv2-MLM-only"
+  embedding_dim: 768
+  max_seq_length: 128
+  batch_size: 32
+
+rl_attack_selector:
+  state_dim: 859           # 768 (claim) + 3 (verdict) + 22 (tried_mask) + 66 (prev_results)
+  hidden_dim: 256
+  num_actions: 22          # 22 measured attacks
+  max_budget_k: 5          # maximum 5 attacks per claim
+  lr_policy: 0.001
+  lr_value: 0.002
+  gamma: 0.99
+  entropy_coef: 0.01
+  eps_clip: 0.2
+  epsilon_grid: [0.05, 0.10, 0.20, 0.30, 0.40]
+  default_epsilon: 0.30
+  
+  # Reward Formulation
+  flip_reward: 1.0         # +1.0 for genuine gated flip
+  api_cost_penalty: 0.05   # -0.05 per attack attempt
+  terminal_pos_bonus: 0.5  # +0.5 if POS-tier attack found within budget
+  
+  # Data Split (claim-level)
+  train_ratio: 0.60        # 500 claims
+  val_ratio: 0.20          # 166 claims
+  test_ratio: 0.20         # 166 claims
+  exclude_baseline_failures: true
+
+rl_exemplar_selector:
+  state_dim: 64
+  hidden_dim: 32
+  lr: 0.001
+  length_penalty_lambda: 0.02
+  loo_folds: 22
+
+lora_predictor:
+  base_model: "sarvamai/sarvam-2b"
+  rank: 8
+  alpha: 16
+  dropout: 0.1
+  target_modules: ["q_proj", "v_proj"]
+  batch_size: 4
+  epochs: 5
+  lr: 0.0002
+
+knowledge_graph:
+  num_claims: 1120
+  num_attacks: 22
+  num_unmeasured_attacks: 31
+  total_measured_edges: 24640
+  attack_feature_dim: 32
+  hidden_dim: 128
+  embedding_dim: 64
+  num_layers: 2
+  dropout: 0.2
+  lr: 0.005
+  epochs: 100
+  pos_threshold_asr: 40.0
+  mid_threshold_asr: 15.0

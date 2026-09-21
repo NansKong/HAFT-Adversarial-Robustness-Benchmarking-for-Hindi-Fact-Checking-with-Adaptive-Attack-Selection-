@@ -1,0 +1,6 @@
+Model,Accuracy (%),Macro-F1,AUROC,AUPRC
+Attack Mean,91.66%,0.478,0.877,0.329
+kNN (Attributes),91.66%,0.478,0.739,0.188
+Plain MLP,91.66%,0.478,0.862,0.483
+GraphSAGE (Ours),91.66%,0.478,0.865,0.482
+GAT (Ours),91.66%,0.478,0.355,0.071
