@@ -10,7 +10,7 @@
 
 ---
 
-## 🌟 Executive Framework Overview
+## Executive Framework Overview
 
 HAFT investigates how automated fact-checking pipelines in low-resource, non-Latin scripts (Devanagari Hindi) fail under systematic adversarial perturbations, and introduces adaptive optimization algorithms to accelerate vulnerability discovery while drastically reducing verification query costs.
 
