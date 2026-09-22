@@ -35,7 +35,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
                                                   ▼
 +---------------------------------------------------------------------------------------------------+
 |  3. CROSS-ARCHITECTURE EMPIRICAL VALIDATION                                                       |
-|     • Independent 985-Query Transfer Audit on Meta Llama 3 70B Instruct via Replicate API         |
+|     • Independent 966-Query Transfer Audit on Meta Llama 3 70B Instruct via Replicate API         |
 |     • Top Semantic Attacks Transfer Decisively (73.8% – 100.0% Transfer ASR across Model Families)|
 +---------------------------------------------------------------------------------------------------+
 ```
@@ -46,7 +46,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 
 1. **Zero-Knowledge Adaptive RL Attack Selection**: Formulates adversarial probing as a finite-horizon Markov Decision Process ($K \le 5$) with dynamic action masking, discovering fatal vulnerabilities in just **1.20 median steps** with **77.27% verification cost reduction** and requiring **zero prior pilot evaluations**.
 2. **Cold-Start Inductive Graph Modeling**: Constructs an 1,142-node bipartite claim-attack graph and employs inductive **GraphSAGE link prediction** to forecast whether an unseen, newly cataloged attack will succeed on specific claims (**AUROC = 0.865**, **AUPRC = 0.482** under strict node and edge isolation).
-3. **Cross-Architecture Transferability**: Decouples attack generation and verification by auditing gated flips against **Meta Llama 3 70B Instruct** across 985 live API queries, confirming that vulnerabilities reflect genuine factual reasoning weaknesses rather than model-specific artifacts.
+3. **Cross-Architecture Transferability**: Decouples attack generation and verification by auditing gated flips against **Meta Llama 3 70B Instruct** across 966 live API queries, confirming that vulnerabilities reflect genuine factual reasoning weaknesses rather than model-specific artifacts.
 4. **Calibrated In-Context Feasibility Prediction**: An adaptive policy that selects compact, multi-tier exemplars for prompt-based attack feasibility estimation, achieving **90.91% accuracy** while reducing prompt token consumption by **61%** compared to full-pool baselines.
 5. **Systematic 22-Attack Hindi Taxonomy**: The first dedicated taxonomy for native Devanagari text, spanning surface orthographic noise, grammatical jumbling, semantic entity replacement, and evidence distractor injection.
 6. **Grounding Against Prior Literature**: Situated against 6 foundational AFC and adversarial NLI benchmarks (FEVER, LIAR, ANLI, FEVEROUS, XFact, and HindFake), addressing critical gaps in multilingual evidence-level adversarial robustness.
@@ -139,7 +139,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 ---
 
 ### Table 6: Cross-Model Transferability Audit on Meta Llama 3 70B
-*985 live API completions via Replicate auditing attack transferability across model families (Saved in `results/stage2/cross_model/cross_model_transfer_asr.csv`):*
+*966 live API completions via Replicate auditing attack transferability across model families (Saved in `results/stage2/cross_model/cross_model_transfer_asr.csv`):*
 
 | Attack Key | Attack Category | Attack Type | Verified by Llama 3 70B | Llama Flips | **Transfer ASR** | Robustness Verdict |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
