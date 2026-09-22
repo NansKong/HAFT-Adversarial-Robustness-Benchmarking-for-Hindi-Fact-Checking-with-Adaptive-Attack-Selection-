@@ -32,6 +32,8 @@ judge_audit.jsonl
 *.pdf
 attack_docs/
 full data/
+reporting/
+Attack/reporting/
 
 # OS / Editor files
 .DS_Store
