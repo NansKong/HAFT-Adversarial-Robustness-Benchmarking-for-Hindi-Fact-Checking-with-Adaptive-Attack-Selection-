@@ -2,10 +2,10 @@
 
 Recreates the visual aesthetics, layout, modular panels, badges, and circuits of
 `attack diagram.jpeg` with 100% fidelity, incorporating all Stage 2 advancements:
-- Exact 859 -> 987 state dimensions (+4.22% flip gain from 128-dim GraphSAGE embeds)
+- Exact 859 -> 987 state dimensions (GNN-augmented offline replay environment)
 - Bipartite heterogeneous graph (1,142 nodes, 49,364 directed edges)
 - Pure PyTorch vectorized GraphSAGE vs GAT vs Plain MLP link prediction
-- RL Exemplar Selector (95.45% LOO accuracy, 52.4% token reduction)
+- RL Exemplar Selector (90.91% LOO accuracy, 61.4% token reduction @ 8.1 exemplars)
 - 31 survey attack tier classifications (2 POS, 28 MID, 1 NEG)
 - 5-LLM empirical comparison matrix (DeepSeek 72.7% vs Western LLMs 27.3%)
 - Native Devanagari Hindi font rendering (Nirmala UI) with zero missing glyphs
@@ -320,7 +320,7 @@ def generate_master_diagram():
         ax, 0.174, 0.315, 0.598, 0.635,
         bg_color="#ffffff", border_color="#2563eb",
         title="Phase 1 : Adaptive Measurement (RL Attack Selector)",
-        subtitle="·  Test smart, not everything   (Budget K <= 5 queries per claim | 77.27% Cost Reduction | Median 1.4 steps to flip)",
+        subtitle="·  Test smart, not everything   (Budget K <= 5 queries per claim | 77.27% Cost Reduction | Median 1.2 steps to flip)",
         border_width=2.2, title_size=11.0
     )
 
@@ -369,7 +369,7 @@ def generate_master_diagram():
         "• Attack properties (44)\n"
         "• Progression ratio (3)\n"
         "+ GNN GraphSAGE (128)\n"
-        "  = 987 dims (+4.22% flip)",
+        "  = 987 dims (Ablation parity)",
         fontsize=7.5, color="#1e3a8a", va="top", transform=ax.transAxes, zorder=3
     )
 
@@ -381,7 +381,7 @@ def generate_master_diagram():
     )
     ax.text(
         0.241, 0.362,
-        "Effective attacks found\n(Median 1.4 calls, max 5)",
+        "Effective attacks found\n(Median 1.2 calls, max 5)",
         ha="center", va="center", fontsize=7.2, fontweight="bold", color="#15803d", transform=ax.transAxes, zorder=3
     )
 
@@ -600,9 +600,9 @@ def generate_master_diagram():
     ax.text(
         0.794, 0.528,
         "• 22-Fold Leave-One-Out (LOO) In-Fold Policy Gradient\n"
-        "• 95.45% LOO Accuracy (21 / 22 correctly predicted)\n"
-        "• 52.4% Prompt Token Reduction (9.9 vs 21 exemplars)\n"
-        "• Macro-F1: 0.952 across all feasibility tiers",
+        "• 90.91% LOO Accuracy (20 / 22 correctly predicted)\n"
+        "• 61.4% Prompt Token Reduction (8.1 vs 21 exemplars)\n"
+        "• Macro-F1: 0.874 (McNemar p = 1.0000 vs Random-5)",
         fontsize=7.2, color="#7c2d12", va="top", transform=ax.transAxes, zorder=3
     )
 
@@ -712,7 +712,7 @@ def generate_master_diagram():
     )
     ax.text(
         0.260, 0.290,
-        "graph embeddings\n(upgrades RL state: +4.22% flip)",
+        "graph embeddings\n(upgrades RL state: 987-dim)",
         fontsize=7.2, fontweight="bold", color="#0284c7", ha="left", va="center", transform=ax.transAxes
     )
 
@@ -779,7 +779,7 @@ def generate_master_diagram():
     ]
     col3 = [
         "Predicted POS / MID / NEG for 31 unmeasured attacks",
-        "API cost: 1.4 median calls instead of 22",
+        "API cost: 1.2 median calls instead of 22",
     ]
     col4 = [
         "How the system reached the result (explainable)",
