@@ -1,0 +1,23 @@
+Attack,Attack Type,LLM Confound,Original Flips (gpt-4o-mini),Verified by Llama 3 70B,Transfer ASR,Self-Preference Risk,Llama Flips
+CA_CHAR_01_CharacterSwapping,Rule-Based (Python),None,14,"N/A — Rule-based, no confound",N/A,None,
+CA_CHAR_02_CharacterRepetition,Rule-Based (Python),None,16,"N/A — Rule-based, no confound",N/A,None,
+CA_CHAR_03_CharacterInsertion,Rule-Based (Python),None,29,"N/A — Rule-based, no confound",N/A,None,
+CA_CHAR_04_CharacterDeletion,Rule-Based (Python),None,24,"N/A — Rule-based, no confound",N/A,None,
+CA_CHAR_05_HomoglyphPerturbation,Rule-Based (Python),None,21,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_02_EntityDisambiguation,Rule-Based (Python),None,0,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_03_Jumbling,Rule-Based (Python),None,95,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_04_Typos,Rule-Based (Python),None,23,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_08_LexicalSubstitution,Rule-Based (Python),None,15,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_12_Synonyms,Rule-Based (Python),None,6,"N/A — Rule-based, no confound",N/A,None,
+CA_WORD_13_PhoneticPerturbation,Rule-Based (Python),None,19,"N/A — Rule-based, no confound",N/A,None,
+CA_03_LexicallyInformed,Rule-Based (Python),None,9,"N/A — Rule-based, no confound",N/A,None,
+EA_IMP_01_ImperceptibleVerification,LLM-Generated,Potential,3,0,0.00%,Medium-High,0.0
+EA_OMITOMISSION_01_OmissionGeneration,LLM-Generated,Potential,51,0,0.00%,Medium-High,0.0
+CA_06_FactMixing,LLM-Generated,Potential,346,200,3.50%,Medium-High,7.0
+CA_07_AdvTrigger,Rule-Based (Python),None,23,"N/A — Rule-based, no confound",N/A,None,
+CA_16_Colloquial,Rule-Based (Python),None,17,"N/A — Rule-based, no confound",N/A,None,
+EA_ADVADD_01_AdvAdd,LLM-Generated,Potential,397,200,99.50%,Low,199.0
+EA_CLAIMREWRITE_01_ClaimRewrite,LLM-Generated,Potential,164,164,73.78%,Low,121.0
+EA_CTXREP_01_ContextualizedReplace,LLM-Generated,Potential,364,200,89.50%,Low,179.0
+EA_FACT2FICT_01_Fact2Fiction,LLM-Generated,Potential,341,200,100.00%,Low,200.0
+EA_IMPRET_01_ImperceptibleRetrieval,LLM-Generated,Potential,2,2,50.00%,Medium-High,1.0

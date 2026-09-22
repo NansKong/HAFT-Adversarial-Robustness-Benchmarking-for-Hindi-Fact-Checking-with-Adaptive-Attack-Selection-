@@ -27,6 +27,7 @@ judge_audit.jsonl
 *.xlsm
 *.xls
 *.docx
+!HAFT_ICLR_Remediation_Report*.docx
 *.doc
 *.pdf
 attack_docs/

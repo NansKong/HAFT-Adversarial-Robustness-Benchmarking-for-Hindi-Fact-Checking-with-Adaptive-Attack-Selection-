@@ -1,10 +1,10 @@
-Method,Exemplars Used,Accuracy (%),Correct / 22,Macro-F1
-Zero-shot,0,27.27%,6 / 22,0.444
-Always-NEG,0,72.73%,16 / 22,0.281
-Attribute-only,0,54.55%,12 / 22,0.581
-Existing Few-shot (All 21),21,95.45%,21 / 22,0.952
-Random-5,5,95.45%,21 / 22,0.952
-Top-5 Similarity,5,90.91%,20 / 22,0.911
-Random-10,10,95.45%,21 / 22,0.952
-Top-10 Similarity,10,95.45%,21 / 22,0.952
-RL-Selected (Ours),9.9,95.45%,21 / 22,0.952
+Method,Exemplars Used,Accuracy (%),Acc Std (%),Correct / 22,Macro-F1,McNemar p vs Random-5
+Zero-shot,0,27.27%,N/A,6 / 22,0.444,—
+Always-NEG,0,72.73%,N/A,16 / 22,0.281,—
+Attribute-only,0,54.55%,N/A,12 / 22,0.581,—
+Existing Few-shot (All 21),21,95.45%,N/A,21 / 22,0.952,—
+Random-5,5,95.45%,N/A,21 / 22,0.952,—
+Top-5 Similarity,5,90.91%,N/A,20 / 22,0.911,—
+Random-10,10,95.45%,N/A,21 / 22,0.952,—
+Top-10 Similarity,10,95.45%,N/A,21 / 22,0.952,—
+RL-Selected (Ours),8.1,90.91%,±19.20%,20 / 22,0.874,1.0000

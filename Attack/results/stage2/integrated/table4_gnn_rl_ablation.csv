@@ -1,6 +1,6 @@
-Ablation Configuration,State Dims,Claims Evaluated,Flip Discovery Rate (%),Median Steps,Relative Gain vs Flat
-Flat RL (Standard 859-dim),859,832,66.47%,1.0,—
-GNN-Enhanced RL (Relational State),987,832,70.69%,1.0,+4.22%
-RL without API Cost Penalty (capi = 0),859,832,76.65%,2.0,10.18%
-RL without Exploration (eps = 0),859,832,76.65%,2.0,10.18%
-Full Dataset (Including 288 Failures),859,1120,59.82%,1.0,-6.65%
+Ablation Configuration,State Dims,Claims Evaluated,Flip Discovery (mean±std),Median Steps,Relative Gain vs Flat
+Flat RL (859-dim),859,832,82.16% ± 2.02%,1.2,—
+GNN-Enhanced RL (987-dim),987,832,80.72% ± 3.06%,1.2,-1.44%
+RL w/o API Cost Penalty,859,832,82.51% ± 2.44%,1.2,+0.36%
+RL w/o Exploration (eps=0),859,832,84.67% ± 2.67%,1.0,+2.51%
+Full Dataset (incl. 288 failures),859,1120,59.29% ± 0.95%,1.0,-22.87%

@@ -17,17 +17,22 @@ from rl.policy import AttackPolicy, ValueBaseline
 
 
 class REINFORCEAgent:
-    """REINFORCE agent with learned state-value baseline and action masking."""
+    """REINFORCE agent with learned state-value baseline and action masking.
+
+    Supports both the standard 859-dim flat state and the 987-dim GNN-augmented
+    state (Flaw 2 fix). Pass state_dim=987 for GNN-enhanced RL training.
+    Entropy coefficient raised to 0.05 for improved exploration coverage.
+    """
 
     def __init__(
         self,
         state_dim: int = 859,
-        hidden_dim: int = 256,
+        hidden_dim: int = 512,
         num_actions: int = 22,
         lr_policy: float = 0.001,
         lr_value: float = 0.002,
         gamma: float = 0.99,
-        entropy_coef: float = 0.01,
+        entropy_coef: float = 0.05,
         max_grad_norm: float = 1.0,
         device: str = "cpu",
     ):
