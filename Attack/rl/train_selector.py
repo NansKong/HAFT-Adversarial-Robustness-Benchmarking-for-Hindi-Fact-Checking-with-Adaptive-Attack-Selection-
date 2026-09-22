@@ -188,6 +188,8 @@ def evaluate_rl_agent(
 
 def main():
     parser = argparse.ArgumentParser(description="HAFT Stage 2: Train and evaluate RL Attack Selector.")
+    parser.add_argument("--mode", type=str, default="multi_seed",
+                        help="Execution mode (single_seed or multi_seed)")
     parser.add_argument("--seeds", nargs="+", type=int, default=[42, 43, 44, 45, 46])
     parser.add_argument("--epochs", type=int, default=25)
     parser.add_argument("--epsilon", type=float, default=0.10,
