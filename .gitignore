@@ -42,5 +42,8 @@ Thumbs.db
 .idea/
 .commandcode/
 
-# TeX source files (manuscript managed on Overleaf / submission system)
+# TeX & LaTeX compilation files (manuscript managed on Overleaf / submission system)
 *.tex
+*.bib
+*.bst
+*.sty
