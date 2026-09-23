@@ -12,7 +12,7 @@
 
 ## Executive Framework Overview
 
-HAFT investigates how automated fact-checking pipelines in low-resource, non-Latin scripts (Devanagari Hindi) fail under systematic adversarial perturbations, and introduces adaptive optimization algorithms to accelerate vulnerability discovery while drastically reducing verification query costs.
+HAFT investigates how automated fact-checking pipelines in low-resource, non-Latin scripts (Devanagari Hindi) fail under systematic adversarial perturbations, and introduces adaptive optimization algorithms to accelerate vulnerability discovery while reducing the nominal number of attack attempts.
 
 ```
 +---------------------------------------------------------------------------------------------------+
@@ -27,16 +27,16 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
                                                   ▼
 +---------------------------------------------------------------------------------------------------+
 |  2. ADAPTIVE INTELLIGENCE LAYER                                                                   |
-|     • Claim-Adaptive RL Attack Selector (REINFORCE, K <= 5, 77.27% Cost Reduction)                |
-|     • Inductive GraphSAGE Link Prediction (AUROC 0.865 on Unseen Cold-Start Attacks)              |
+|     • Claim-Adaptive RL Attack Selector (REINFORCE, K <= 5, 77.27% Attempt-Budget Reduction)       |
+|     • GraphSAGE Link Prediction (0.865 exploratory / 0.485 Leave-Attack-Out AUROC)                 |
 |     • In-Context Exemplar Policy (8.1 Exemplars, 90.91% Accuracy, Statistically Validated)        |
 +---------------------------------------------------------------------------------------------------+
                                                   │
                                                   ▼
 +---------------------------------------------------------------------------------------------------+
 |  3. CROSS-ARCHITECTURE EMPIRICAL VALIDATION                                                       |
-|     • Independent 966-Query Transfer Audit on Meta Llama 3 70B Instruct via Replicate API         |
-|     • Top Semantic Attacks Transfer Decisively (73.8% – 100.0% Transfer ASR across Model Families)|
+|     • 1,020 Candidate Transfer Audit; 966 Completed Llama 3 70B Pairs via Replicate API            |
+|     • Several Dominant Attacks Transfer Strongly (73.8% – 100.0% Transfer ASR)                    |
 +---------------------------------------------------------------------------------------------------+
 ```
 
@@ -44,10 +44,10 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 
 ## 🏛️ Six Core Research Pillars
 
-1. **Zero-Knowledge Adaptive RL Attack Selection**: Formulates adversarial probing as a finite-horizon Markov Decision Process ($K \le 5$) with dynamic action masking, discovering fatal vulnerabilities in just **1.20 median steps** with **77.27% verification cost reduction** and requiring **zero prior pilot evaluations**.
-2. **Cold-Start Inductive Graph Modeling**: Constructs an 1,142-node bipartite claim-attack graph and employs inductive **GraphSAGE link prediction** to forecast whether an unseen, newly cataloged attack will succeed on specific claims (**AUROC = 0.865**, **AUPRC = 0.482** under strict node and edge isolation).
-3. **Cross-Architecture Transferability**: Decouples attack generation and verification by auditing gated flips against **Meta Llama 3 70B Instruct** across 966 live API queries, confirming that vulnerabilities reflect genuine factual reasoning weaknesses rather than model-specific artifacts.
-4. **Calibrated In-Context Feasibility Prediction**: An adaptive policy that selects compact, multi-tier exemplars for prompt-based attack feasibility estimation, achieving **90.91% accuracy** while reducing prompt token consumption by **61%** compared to full-pool baselines.
+1. **Zero-Pilot Adaptive RL Attack Selection**: Formulates adversarial probing as a finite-horizon Markov Decision Process ($K \le 5$) with dynamic action masking, discovering vulnerabilities in **1.20 median steps** with a nominal **77.27% attempt-budget reduction** and zero prior pilot evaluations at deployment.
+2. **Inductive Graph Modeling**: Constructs a 1,142-node heterogeneous claim-attack graph and evaluates GraphSAGE under both exploratory random splitting (**AUROC 0.865**) and strict Leave-Attack-Out (**AUROC 0.485, AUPRC 0.121**); cold-start generalization is not established.
+3. **Cross-Architecture Transferability**: Audits gated flips against **Meta Llama 3 70B Instruct** across 1,020 selected candidates, of which 966 were completed, providing attack-dependent evidence of transfer rather than a universal model-confound result.
+4. **Calibrated In-Context Feasibility Prediction**: A learned policy selects compact exemplars for prompt-based attack-feasibility estimation, achieving **90.91% accuracy** with an average of 8.1 exemplars; the 61.4% figure is an exemplar-count reduction, not measured token savings.
 5. **Systematic 22-Attack Hindi Taxonomy**: The first dedicated taxonomy for native Devanagari text, spanning surface orthographic noise, grammatical jumbling, semantic entity replacement, and evidence distractor injection.
 6. **Grounding Against Prior Literature**: Situated against 6 foundational AFC and adversarial NLI benchmarks (FEVER, LIAR, ANLI, FEVEROUS, XFact, and HindFake), addressing critical gaps in multilingual evidence-level adversarial robustness.
 
@@ -58,7 +58,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 ### Table 1: Adaptive Offline RL Attack Selector Efficiency ($K \le 5$ Budget)
 *Evaluated across 5 independent random seeds (`[42, 43, 44, 45, 46]`) over 832 clean baseline claims (Saved in `results/stage2/rl/table1_rl_efficiency.csv`):*
 
-| Method | Budget ($K$) | Claims with $\ge 1$ Flip (%) | Median Steps to Flip | Calls / Claim | Cost Reduction vs. Exhaustive | **Pilot Calls to Build** |
+| Method | Budget ($K$) | Claims with $\ge 1$ Flip (%) | Median Steps to Flip | Calls / Claim | Attempt-Budget Reduction vs. Exhaustive | **Pilot Calls to Build** |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Random-5** | 5 | $40.84\% \pm 2.94\%$ | 2.60 | 5.00 | 77.27% | **0** |
 | **Claim-Agnostic Bandit (UCB)** | 5 | $72.69\% \pm 3.96\%$ | 1.00 | 5.00 | 77.27% | **0** |
@@ -67,7 +67,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 | *Oracle-22 (Exhaustive Upper Bound)* | 22 | $90.90\% \pm 0.70\%$ | 15.00 | 22.00 | 0.00% | **0** |
 
 * **Zero-Pilot Operational Advantage**: Static Top-5 is an offline empirical oracle whose fixed attack ranking requires 24,640 exhaustive prior evaluations across the entire dataset to discover. In practical deployment scenarios (such as auditing newly deployed AFC models or evaluating new Indic languages), Static Top-5 cannot be instantiated without incurring that full upfront cost.
-* **Superior Performance Among Zero-Knowledge Methods**: Operating with zero prior knowledge, our RL selector significantly outperforms claim-agnostic baselines: **+9.47pp higher discovery than Bandit (UCB)** and **+41.32pp higher discovery than Random-5**.
+* **Superior Performance Among Zero-Pilot Methods**: With zero prior pilot evaluations at deployment, our RL selector significantly outperforms claim-agnostic baselines: **+9.47pp higher discovery than Bandit (UCB)** and **+41.32pp higher discovery than Random-5**.
 * **Faster Vulnerability Discovery**: Because the policy conditions on the 768-dim IndicBERT claim embedding, it dynamically adapts the attack sequence to claim length and semantics, finding successful flips in **1.20 median steps** (faster than Static Top-5 at 1.40 steps).
 
 ---
@@ -88,22 +88,22 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 | **RL-Selected Exemplars (Ours)** | **8.1** | **90.91%** | **±19.20%** | **20 / 22** | **0.874** | **1.0000** *(Statistically Equivalent)* |
 
 * **Statistical Equivalence ($p = 1.0000$)**: The exact paired McNemar test demonstrates that 20/22 vs. 21/22 represents a single boundary attack difference (`EA_IMPRET_01`) that is statistically indistinguishable on $N=22$.
-* **Robust Multi-Tier Coverage**: Top-$k$ similarity suffers from class-imbalance traps (e.g., selecting all-negative character perturbations when queries are orthographic). In contrast, the RL policy optimizes a joint accuracy-compactness reward, learning to select balanced exemplars across all three ASR tiers (POS, MID, NEG) while saving **19% prompt tokens vs. Top-10** and **61% vs. All-21**.
+* **Compactness**: The selector reduces exemplar count relative to the full 21-exemplar context, but this is not tokenizer-measured token savings and does not improve accuracy over Random-5 on this 22-target evaluation.
 
 ---
 
-### Table 3: Inductive Leave-Attack-Out GraphSAGE Link Prediction
-*Evaluated on an 1,142-node heterogeneous bipartite graph across 22 inductive folds with strict test node and edge masking (Saved in `results/stage2/graph/table3_graph_prediction.csv`):*
+### Table 3: Claim-Attack Graph Link Prediction
+*Evaluated on a 1,142-node heterogeneous graph across 22 folds; random-split values are exploratory and leakage-prone, while LAO is the cold-start check (Saved in `results/stage2/graph/table3_graph_prediction.csv`):*
 
 | Model | Accuracy (%) | Macro-F1 | AUROC | AUPRC (Rare Flips Precision) | Split Protocol |
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | **Attack Mean ASR** | 91.66% | 0.478 | 0.877 | 0.329 | Global empirical rate |
 | **Attribute-kNN** | 91.66% | 0.478 | 0.739 | 0.188 | Tabular feature distance |
 | **Plain MLP (No Graph)** | 91.66% | 0.478 | 0.862 | 0.483 | No message passing |
-| **GraphSAGE (Ours)** | **91.66%** | **0.478** | **0.865 ± 0.041** | **0.482 ± 0.053** | 🏆 **Strict Inductive LAO Split (Zero Leakage)** |
+| **GraphSAGE** | **91.66%** | **0.478** | 0.865 (random) / **0.485 (LAO)** | 0.482 (random) / **0.121 (LAO)** | Exploratory split / strict LAO |
 | **GAT (Graph Attention)** | 91.66% | 0.478 | 0.355 | 0.071 | Softmax attention collapsed under 91.7% class imbalance |
 
-* **Cold-Start Generalization**: Under strict inductive isolation where target attack nodes and all their incident edges are completely masked during message passing, GraphSAGE demonstrates strong transferability (**AUROC = 0.865**, **AUPRC = 0.482**), significantly outperforming tabular attribute baselines.
+* **Cold-Start Generalization**: Under strict Leave-Attack-Out isolation, GraphSAGE is near chance (**AUROC = 0.485**, **AUPRC = 0.121**); robust generalization to unseen attacks is not established.
 
 ---
 
@@ -139,7 +139,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 ---
 
 ### Table 6: Cross-Model Transferability Audit on Meta Llama 3 70B
-*966 live API completions via Replicate auditing attack transferability across model families (Saved in `results/stage2/cross_model/cross_model_transfer_asr.csv`):*
+*1,020 selected candidate pairs, of which 966 were completed via Replicate (Saved in `results/stage2/cross_model/cross_model_transfer_asr.csv`):*
 
 | Attack Key | Attack Category | Attack Type | Verified by Llama 3 70B | Llama Flips | **Transfer ASR** | Robustness Verdict |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
@@ -152,7 +152,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
 | `CA_06_FactMixing` | Claim Multi-Fact Mixing | Generative LLM | 200 | 7 | **3.50%** | Model-Specific Vulnerability |
 
 * **Zero-Confound Baseline**: 63.6% of the benchmark (14 of 22 attacks) consists of deterministic Python rules, immune to generative model bias.
-* **Robust Cross-Architecture Transfer**: Primary semantic attacks transfer decisively across model families (73.8% to 100.0% Transfer ASR), confirming that vulnerabilities represent genuine factual reasoning failures in Hindi automated fact-checking.
+* **Transfer Evidence**: Several dominant attacks transfer strongly across model families (73.8% to 100.0% Transfer ASR), but unequal samples and the shared quality judge prevent universal-transfer or complete-confound claims.
 
 ---
 
@@ -162,7 +162,7 @@ HAFT investigates how automated fact-checking pipelines in low-resource, non-Lat
    - **Severe Fragility to Evidence Manipulation**: Evidence-level manipulations devastate Hindi fact-checkers (`ContextualizedReplace` 59.57% Gated ASR, `AdvAdd` 58.47%, `Fact2Fiction` 57.60%, `FactMixing` 55.81%).
    - **High Resilience to Character Typos**: Surface Devanagari character perturbations achieve negligible success (`CharacterSwapping` 1.85% Gated ASR, `Repetition` 2.46%, `Homoglyph` 2.75%).
 2. **Western LLM Cognitive Bias**: Commercial Western LLMs scored only **27.27% zero-shot accuracy** in estimating Hindi attack feasibility, exhibiting an inverted cognitive bias: assuming character typos break the system while overlooking evidence tampering.
-3. **GraphSAGE Outperforms GAT on Sparse Bipartite Graphs**: Under severe class imbalance (8.34% positive edge rate), GraphSAGE mean aggregation cleanly regularizes topological representations, whereas GAT attention over-smooths.
+3. **GraphSAGE Versus GAT on a Sparse Heterogeneous Graph**: Under severe class imbalance (8.34% positive edge rate), GraphSAGE performs better than GAT on the exploratory random split, but the strict Leave-Attack-Out result is near chance and does not establish cold-start generalization.
 
 ---
 
