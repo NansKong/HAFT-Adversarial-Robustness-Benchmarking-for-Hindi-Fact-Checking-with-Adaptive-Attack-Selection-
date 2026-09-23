@@ -1,0 +1,12 @@
+Rank,Attack Name,Predicted Tier,Est. Prob,Pipeline Scope,Red-Team Priority
+1,Multi-hop Reasoning,MID,0.35,Untestable (Multi-evidence schema required),Medium
+2,Multi-hop Temporal Disconnect,MID,0.35,Untestable (Multi-evidence schema required),Medium
+3,Model-Targeting Backdoor,MID,0.22,Testable Textual Perturbation,Medium
+4,Dataset Bias Exploitation,MID,0.22,Testable Textual Perturbation,Medium
+5,Controversy Triggering,MID,0.22,Testable Textual Perturbation,Medium
+6,Subset Number Manipulation,MID,0.22,Testable Textual Perturbation,Medium
+7,Ambiguity (NotClear),MID,0.22,Testable Textual Perturbation,Medium
+8,Finite Set Replacement,MID,0.22,Testable Textual Perturbation,Medium
+9,NEI Additive Injection,MID,0.22,Testable Textual Perturbation,Medium
+10,Conjunctive Confounding,MID,0.22,Testable Textual Perturbation,Medium
+11-31,21 Additional Candidate Perturbations,MID,0.22,Testable Textual Perturbations,Medium

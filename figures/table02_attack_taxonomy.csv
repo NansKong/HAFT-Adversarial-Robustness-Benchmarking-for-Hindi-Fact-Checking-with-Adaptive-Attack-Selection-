@@ -1,0 +1,5 @@
+Family,Attacks,Execution Arm
+Character-Level (5),"Character Swapping, Repetition, Insertion, Deletion, Homoglyph Perturbation","Rule-Based (Python, $0.00)"
+Word-Level (6),"Entity Disambiguation, Word Jumbling, Typos, Lexical Substitution, Synonyms, Phonetic Perturbation","Rule-Based (Python, $0.00)"
+Sentence-Level (5),"Lexically-Informed Rewrite (Rule), Fact Mixing (LLM), AdvTrigger (LLM), Colloquial (LLM), Masked-Token Claim Rewrite (LLM)",Hybrid (1 Rule / 4 LLM)
+Evidence-Level (6),"Imperceptible Verification (Rule), Syntactic Omission (Rule), AdvAdd (LLM), ContextReplace (LLM), Fact2Fiction (LLM), Imperceptible Retrieval (LLM)",Hybrid (2 Rule / 4 LLM)

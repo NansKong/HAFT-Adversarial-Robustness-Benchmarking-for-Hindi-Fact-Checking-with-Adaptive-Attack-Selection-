@@ -1,0 +1,23 @@
+Attack Mechanism,Attack Family,Execution Arm,Raw ASR (%),Gated ASR (%),Empirical Tier
+Contextualized Evidence Replace,Evidence-level,LLM-based,63.52,59.57,POS
+Poisoned Evidence Addition,Evidence-level,LLM-based,61.0,58.47,POS
+Agentic Fictional Evidence,Evidence-level,LLM-based,61.33,57.6,POS
+Fact Mixing,Sentence-level,LLM-based,59.82,55.81,POS
+Masked Token Claim Rewrite,Sentence-level,LLM-based,28.49,25.39,MID
+Syntactic Omission,Evidence-level,Rule-based,21.72,19.62,MID
+Word Jumbling,Word-level,Rule-based,12.57,12.57,NEG
+Adversarial Trigger Ingestion,Sentence-level,LLM-based,18.25,4.28,NEG
+Character Insertion,Character-level,Rule-based,4.35,3.63,NEG
+Synonym Replacement,Word-level,Rule-based,4.73,3.59,NEG
+Character Deletion,Character-level,Rule-based,7.73,3.3,NEG
+Phonetic Perturbation,Word-level,Rule-based,3.75,3.25,NEG
+Typos & Misspellings,Word-level,Rule-based,3.44,2.95,NEG
+Homoglyph Perturbation,Character-level,Rule-based,3.12,2.75,NEG
+Lexical Substitution,Word-level,Rule-based,2.95,2.47,NEG
+Character Repetition,Character-level,Rule-based,3.79,2.46,NEG
+Colloquial Rephrasing,Sentence-level,LLM-based,3.81,2.43,NEG
+Character Swapping,Character-level,Rule-based,7.24,1.85,NEG
+Lexically Informed Rewrite,Sentence-level,Rule-based,2.45,1.39,NEG
+Imperceptible Verification Noise,Evidence-level,Rule-based,3.25,0.4,NEG
+Imperceptible Retrieval Noise,Evidence-level,LLM-based,2.66,0.26,NEG
+Entity Disambiguation,Word-level,Rule-based,0.0,0.0,NEG
