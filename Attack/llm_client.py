@@ -119,9 +119,13 @@ class LLMClient:
                 self._audit(request, None, ok=False, error=str(exc))
                 exc_str = str(exc).lower()
                 if "rate_limit" in exc_str or "rate limit" in exc_str or "429" in exc_str or "tpd" in exc_str:
-                    # Rate limit hit: wait 60s without consuming standard attempt limit
-                    print(f"[llm] Rate limit hit ({exc}); waiting 60s before retry...", file=sys.stderr)
-                    time.sleep(60)
+                    # Rate limit hit: check for retry_after or default to 6s
+                    retry_wait = 6
+                    m_retry = re.search(r"retry_after[\"':\s]+(\d+)", exc_str)
+                    if m_retry:
+                        retry_wait = max(int(m_retry.group(1)) + 1, 5)
+                    print(f"[llm] Rate limit hit ({exc}); waiting {retry_wait}s before retry...", file=sys.stderr)
+                    time.sleep(retry_wait)
                 elif attempt >= self.max_retries:
                     raise LLMClientError(f"LLM call failed after {attempt} attempts: {exc}")
                 else:

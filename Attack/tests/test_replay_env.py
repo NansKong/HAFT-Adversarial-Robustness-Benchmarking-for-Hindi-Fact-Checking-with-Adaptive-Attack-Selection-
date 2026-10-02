@@ -8,7 +8,7 @@ from replay_env import OfflineAttackEnv, ATTACK_KEYS_22
 class TestOfflineAttackEnv(unittest.TestCase):
 
     def setUp(self):
-        self.env = OfflineAttackEnv(base_dir="e:/Attack/Attack", max_budget_k=5)
+        self.env = OfflineAttackEnv(max_budget_k=5)
 
     def test_dataset_size_and_baseline_counts(self):
         self.assertEqual(len(self.env.claims), 1120, "Dataset must have exactly 1,120 claims")

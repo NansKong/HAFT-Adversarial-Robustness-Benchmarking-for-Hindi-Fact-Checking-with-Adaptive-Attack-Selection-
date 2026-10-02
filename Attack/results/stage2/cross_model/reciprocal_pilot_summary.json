@@ -1,0 +1,45 @@
+{
+  "generator_model": "meta/meta-llama-3-70b-instruct",
+  "verifier_model": "openai/gpt-4o-mini",
+  "quality_judge_model": "openai/gpt-4o-mini",
+  "total_claims": 25,
+  "total_evaluations": 100,
+  "overall_raw_flips": 58,
+  "overall_raw_asr_pct": 58.0,
+  "overall_gated_flips": 58,
+  "overall_gated_asr_pct": 58.0,
+  "per_attack": {
+    "EA_ADVADD_01_AdvAdd": {
+      "n": 25,
+      "raw_flips": 11,
+      "raw_asr_pct": 44.0,
+      "mean_fluency": 5.0,
+      "gated_flips": 11,
+      "gated_asr_pct": 44.0
+    },
+    "EA_CTXREP_01_ContextualizedReplace": {
+      "n": 25,
+      "raw_flips": 12,
+      "raw_asr_pct": 48.0,
+      "mean_fluency": 4.75,
+      "gated_flips": 12,
+      "gated_asr_pct": 48.0
+    },
+    "EA_FACT2FICT_01_Fact2Fiction": {
+      "n": 25,
+      "raw_flips": 15,
+      "raw_asr_pct": 60.0,
+      "mean_fluency": 5.0,
+      "gated_flips": 15,
+      "gated_asr_pct": 60.0
+    },
+    "CA_06_FactMixing": {
+      "n": 25,
+      "raw_flips": 20,
+      "raw_asr_pct": 80.0,
+      "mean_fluency": 4.65,
+      "gated_flips": 20,
+      "gated_asr_pct": 80.0
+    }
+  }
+}

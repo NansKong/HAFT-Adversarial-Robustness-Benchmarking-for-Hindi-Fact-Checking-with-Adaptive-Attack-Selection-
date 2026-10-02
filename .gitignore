@@ -27,13 +27,15 @@ judge_audit.jsonl
 *.xlsm
 *.xls
 *.docx
-!HAFT_ICLR_Remediation_Report*.docx
 *.doc
 *.pdf
 attack_docs/
 full data/
 reporting/
 Attack/reporting/
+iclr/
+naacl/
+figures/
 
 # OS / Editor files
 .DS_Store

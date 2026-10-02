@@ -57,7 +57,7 @@ class OfflineAttackEnv:
 
     def __init__(
         self,
-        base_dir: str = "e:/Attack/Attack",
+        base_dir: Optional[str] = None,
         max_budget_k: int = 5,
         flip_reward: float = 1.0,
         api_cost_penalty: float = 0.05,
@@ -65,7 +65,7 @@ class OfflineAttackEnv:
         claim_embeddings: Optional[torch.Tensor] = None,
         exclude_baseline_failures: bool = True,
     ):
-        self.base_dir = os.path.abspath(base_dir)
+        self.base_dir = os.path.abspath(base_dir) if base_dir else os.path.dirname(os.path.abspath(__file__))
         self.max_budget_k = max_budget_k
         self.flip_reward = flip_reward
         self.api_cost_penalty = api_cost_penalty
