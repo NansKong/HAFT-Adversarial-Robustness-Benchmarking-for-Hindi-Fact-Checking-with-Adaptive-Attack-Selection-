@@ -36,17 +36,24 @@ pie title Clean Claim Vulnerability Partition (N = 832)
 
 ### C. Which Attacks Rescue These Blind Spots?
 When evidence-level injection fails, what actually compromises the verifier?
-1. **[`CA_WORD_03_Jumbling`](file:///e:/Attack/Attack/attacks/word_jumbling.py)**: Rescues **19 claims** (55.9% of blind spots). When evidence injection cannot mislead the verifier, scrambling Hindi clause syntax causes reasoning failure.
-2. **[`CA_CHAR_03_CharacterInsertion`](file:///e:/Attack/Attack/attacks/char_insertion.py)**: Rescues **9 claims**.
-3. **[`EA_OMITOMISSION_01_OmissionGeneration`](file:///e:/Attack/Attack/attacks/omission_generation.py)**: Rescues **7 claims**. Omitting non-essential clauses destroys necessary qualifying context.
-4. **[`CA_WORD_13_PhoneticPerturbation`](file:///e:/Attack/Attack/attacks/phonetic_perturbation.py)**: Rescues **7 claims**.
-5. **[`CA_CHAR_04_CharacterDeletion`](file:///e:/Attack/Attack/attacks/char_deletion.py)**: Rescues **7 claims**.
-6. **[`CA_CHAR_05_HomoglyphPerturbation`](file:///e:/Attack/Attack/attacks/homoglyph_perturbation.py)**: Rescues **6 claims**.
-7. **[`CA_WORD_04_Typos`](file:///e:/Attack/Attack/attacks/typos.py)**: Rescues **6 claims**.
+1. **[`CA_WORD_03_Jumbling`](file:///e:/Attack/Attack/attacks/word_jumbling.py)**: Rescues **19 claims** (55.9% of blind spots). When evidence injection cannot mislead the verifier, scrambling Hindi clause syntax causes reasoning failure while preserving bag-of-words overlap ($J=1.0$).
+2. **Non-Jumbling Linguistic Rescues (20 unique claims, 2.40%)**:
+   - Syntactic Omission: 7 claims
+   - Character Insertion: 9 claims
+   - Character Deletion: 7 claims
+   - Phonetic Shifts: 7 claims
+   - Homoglyphs: 6 claims
+   - Typos: 6 claims
+3. **Surface Perturbation Hierarchy**:
+   - **15 unique claims (1.80%)** collapse under character- or word-level surface edits (5 also collapse under word jumbling; 10 resist jumbling).
+   - Strictly excluding both word jumbling and syntactic omission isolates **8 strictly surface-only claims (0.96%)** that collapse exclusively under character or word surface noise.
 
 ### D. Topical Domain Concentration of Blind Spots
 The 34 rescued claims are heavily concentrated in high-stakes civic and public-safety domains:
-* **Crime & Public Safety**: **9 claims (26.5%)**
+* **Crime & Public Safety**: **9 claims (26.5%)** (OR = 3.23, Bonferroni $p = 0.0402$).
+  - Accounts for **8 of the 20 non-jumbling blind spots** (40.0%, $p = 0.0032$).
+  - Accounts for **8 of the 15 surface blind spots** (53.33%, $p < 0.001$).
+  - Accounts for **6 of the 8 strictly surface-only blind spots** (75.00%, $p < 0.001$).
 * **Politics & Elections**: **7 claims (20.6%)**
 * **Disaster & Breaking News**: **6 claims (17.6%)**
 * **Health & Medicine**: **5 claims (14.7%)**
@@ -70,33 +77,24 @@ $$\pi_{\text{hybrid}}(a_t \mid \mathbf{s}_t) = \begin{cases}
 1. **Steps 1 & 2 (Empirical Anchoring)**: Fires the top 2 global evidence attacks. On our benchmark, these two steps alone flip **62.14% (517/832)** of claims, securing a high baseline yield at minimal step count.
 2. **Steps 3–5 (Adaptive RL Handover)**: If the claim resists evidence poisoning, the trained REINFORCE policy receives the updated state vector (which includes failure feedback from steps 1–2) and dynamically explores the remaining 20 attack mechanisms.
 
-### B. Multi-Seed Empirical Results (5 Random Seeds, $K \le 5$)
+### B. Multi-Seed Empirical Results (5 Random Seeds, $K \le 5$, ddof=1)
 
-| Selection Policy | Prior Knowledge / Operational Regime | Test Discovery (Mean $\pm$ SD) | Median Steps | Practical Auditing Character |
-| :--- | :--- | :---: | :---: | :--- |
-| **Random-5** | Zero prior knowledge | $40.84\% \pm 2.94\%$ | 2.60 | Frequently probes low-ASR typos |
-| **Bandit (UCB)** | Online claim-agnostic adaptation | $72.69\% \pm 3.96\%$ | 1.00 | Tracks win rates; blind to claim syntax |
-| **Pure RL Selector** | Offline replay policy ($\mathbb{R}^{859}$) | $82.75\% \pm 3.78\%$ | 1.20 | Explores 16 arms; faces cold-start exploration ceiling |
-| **Hybrid Auditor (Ours)** | **Anchored prior + Adaptive RL** | **$83.83\% \pm 3.03\%$** | **1.20** | **Captures evidence attacks + rescues non-evidence blind spots** |
-| **Static Top-5 Greedy** | Fixed train-split list | $86.71\% \pm 1.16\%$ | 1.40 | Offline artifact requiring $P=24,640$ brute-force calls |
-| **Oracle-22 (Ceiling)** | Exhaustive 22-attack evaluation | $90.90\% \pm 0.70\%$ | 15.00 | Evaluates all 22 attacks per claim |
+| Selection Policy | Prior Knowledge / Operational Regime | Test Discovery (Mean $\pm$ SD) | Blind-Spot Recall (%) | Median Steps | Auditing Character |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Random-5** | Online Dynamic (Zero priors) | $40.84\% \pm 3.29\%$ | 28.57% | 2.60 | Frequently probes low-ASR noise |
+| **Bandit (UCB)** | Online Claim-Agnostic | $72.69\% \pm 4.43\%$ | 14.29% | 1.00 | Tracks win rates; blind to semantics |
+| **Top-2 + Random** | Warm-Start Exploration Baseline | $66.23\% \pm 2.83\%$ | 22.86% | 2.00 | Anchors top 2, then uniform random |
+| **Pure RL Selector** | Offline Replay Policy ($\mathbb{R}^{859}$) | $82.64\% \pm 5.08\%$ | 0.00% | 1.20 | Explores 16 arms; converges to top ASRs |
+| **Hybrid Auditor (Ours)** | **Anchored Prior + Adaptive RL** | **$83.71\% \pm 2.66\%$** | **0.00%** | **1.20** | **+17.49 pp over Top-2 + Random; +42.87 pp over Random-5** |
+| **Static Top-5 Greedy** | ASR-Ranked Global Baseline | $86.71\% \pm 1.30\%$ | 0.00% | 1.40 | Exploits evidence poisoning; 0% blind spots |
+| **Coverage-Aware Policy** | **Offline Greedy (Coverage-Optimized)** | **$86.71\% \pm 1.30\%$** | **51.43%** | **1.40** | **Matches Static Top-5 while recovering 18/35 blind spots** |
+| **Oracle-22 (Ceiling)** | Exhaustive 22-Attack Upper Bound | $88.70\%$ | 100.00% | 22.00 | Evaluates all 22 attacks per claim |
 
-### C. Seed-by-Seed Breakdown & Why Hybrid Beats Static Top-5 on Seed 42
-
-| Seed | Static Top-5 (%) | Pure RL (%) | Hybrid Auditor (%) | Head-to-Head Winner | RL Rescued Claims |
-| :---: | :---: | :---: | :---: | :---: | :---: |
-| **42** | 85.03% | 84.43% | **86.23%** | **Hybrid (+1.20 pp over Static)** | **44 claims** |
-| **43** | 87.43% | 86.83% | **86.23%** | Static (+1.20 pp) | **43 claims** |
-| **44** | 87.43% | 85.63% | **86.23%** | Static (+1.20 pp) | **35 claims** |
-| **45** | 85.63% | 76.65% | **79.04%** | Static (+6.59 pp) | **34 claims** |
-| **46** | 88.02% | 80.24% | **81.44%** | Static (+6.58 pp) | **30 claims** |
-| **Mean**| **86.71%** | **82.75%** | **83.83%** | — | **Total: 186 (Avg 37.2/split)** |
-
-### D. Why Does Static Top-5 Have 86.71% Aggregate While Hybrid Has 83.83%?
-This difference is the mathematical consequence of the **exploration-exploitation trade-off**:
-1. **The Concentration Skew**: Because four evidence-level attacks have individual ASRs of ~55%–60%, Static Top-5 greedily repeats all 4 evidence attacks + 1 rewrite on every claim. It achieves 86.71% solely because repeating four 58% attacks creates high redundant coverage over evidence-susceptible claims. However, it is **100% blind to non-evidence attacks**.
-2. **Hybrid's Exploration**: Hybrid locks in the top 2 evidence attacks (62.14% coverage), but uses steps 3–5 to probe the remaining 20 attacks. When a claim is susceptible to syntactic omission or word jumbling, Hybrid rescues it (186 claims rescued). However, on claims where only the 3rd or 4th evidence attack would have worked, if RL explores a linguistic probe with lower base probability, it may exhaust budget $K=5$ without flipping.
-3. **The Deployment Reality**: Static Top-5 requires measuring all 22 attacks across all 1,120 claims beforehand ($P = 24,640$ pilot calls). In streaming real-world deployment on zero-day claims, global rankings do not exist. Hybrid provides a deployable strategy with high initial yield and genuine diagnostic coverage.
+### C. Gains and Confidence Intervals
+1. **Gain over Top-2 + Random**: The Hybrid Auditor achieves **+17.49 pp improvement** over Top-2 + Random ($66.23\% \to 83.71\%$; seed bootstrap 95% CI $[+14.97, +20.00]$ pp; claim bootstrap $[+13.93, +18.53]$ pp across all 832 claims), rescuing **37.0 test claims per split** (185 total across 5 splits).
+2. **Gain over Pure Random**: Against unguided Random-5 ($40.84\%$), the Hybrid Auditor achieves a **+42.87 pp gain** under identical budget $K \le 5$.
+3. **The Yield vs. Coverage Dilemma**: Return-maximizing RL converges on high-ASR arms (`Fact2Fiction`, `FactMixing`, `ClaimRewrite` drive >92% of actions), yielding 0% recall across 35 seed-level blind-spot evaluation instances.
+4. **Coverage-Aware Auditing Breakthrough**: An offline greedy policy optimizing for blind-spot coverage on training splits replaces `Fact2Fiction` with `Word Jumbling` in 4 of 5 folds. This achieves an exact net-neutral trade-off on test splits—identically matching Static Top-5's **86.71% average discovery** while recovering **51.43% of blind-spot evaluation instances** (18/35 pooled; macro $53.5\% \pm 33.7\%$).
 
 ---
 
@@ -179,10 +177,21 @@ To definitively refute the critique that adversarial vulnerabilities are merely 
   * **`CharInsertion` (Threat Model A)**: **78.06% ASR** (459 / 588)
   * **`WordJumbling` (Threat Model A)**: **71.26% ASR** (419 / 588)
 
+### Fine-Tuned Task-Specialized Indic Encoder (`IndicBERTv2-MLM-only`):
+Beyond zero-shot cross-lingual NLI, we fine-tuned `IndicBERTv2-MLM-only` on **2,801 authentic Hindi fact-checking pairs** sourced from independent registries, using strict MinHash deduplication ($J < 0.30$) to guarantee zero overlap with the **167 held-out benchmark test claims**:
+* **Clean Test Split Accuracy ($N=167$)**: **95.81%** (160 / 167 clean-correct test instances; 98.92% SUP, 90.32% REF, 100.0% NEI).
+* **Adversarial Vulnerability (over 160 clean-correct test instances)**:
+  * **`Fact2Fiction` (Threat Model B)**: **48.75% ASR** (78 / 160)
+  * **`AdvAdd` (Threat Model B)**: **43.75% ASR** (70 / 160; 64.3% SUP$\to$REF direct overwrite)
+  * **`ContextReplace` (Threat Model C)**: **29.38% ASR** (47 / 160)
+  * **`WordJumbling` (Threat Model A)**: **31.25% ASR** (50 / 160)
+  * **`CharInsertion` (Threat Model A)**: **28.75% ASR** (46 / 160)
+
 ### Architectural Contrast: Evidence Overwrite vs. Epistemic Collapse
 1. **Decoder LLMs (`gpt-4o-mini`, `Llama-3-70B`)**: Exhibit **uncalibrated evidence overwrite** (>88% of flips transition decisively from SUP to REF, with <1% NEI).
-2. **Dense NLI Encoders (`mDeBERTa-v3`)**: Exhibit **epistemic collapse into Neutral (NEI)**. Under `AdvAdd`, 68.9% of flips transition to NEI (`SUP->NEI`: 182, `REF->NEI`: 108). Dense cross-encoders recognize the premise-hypothesis tension and default to neutrality rather than asserting contradiction.
-3. **Subword Sensitivity**: Unlike LLMs which tolerate character noise (<3.5% ASR), Devanagari character noise fragments subwords in dense encoders, driving 78.06% flips to NEI (278 `SUP->NEI`).
+2. **Zero-Shot Dense Encoders (`mDeBERTa-v3`)**: Exhibit **epistemic collapse into Neutral (NEI)**. Under `AdvAdd`, 68.9% of flips transition to NEI (`SUP->NEI`: 182, `REF->NEI`: 108). Dense cross-encoders recognize the premise-hypothesis tension and default to neutrality rather than asserting contradiction.
+3. **Fine-Tuned Specialized Encoders (`IndicBERTv2`)**: Exhibit **direct overwrite** (SUP$\to$REF in 45/70 `AdvAdd` flips), as fine-tuned classification heads suppress NEI when forced to classify conflicting pairs.
+4. **Subword Sensitivity**: Unlike LLMs which tolerate character noise (<3.5% ASR), Devanagari character noise fragments subwords in dense encoders, driving 78.06% flips on `mDeBERTa-v3` and 28.75% on `IndicBERTv2`.
 
 ### Dataset Scale: The Full 2,964-Claim Corpus
 In addition to the stratified 1,120-claim benchmark, the broader HAFT archive (`e:\Attack\full data`) contains **2,964 authentic claim-evidence pairs** across 7 civic domains (including Regional & Communal Issues with 615 claims, Celebrity News 498, Disaster News 500, Health & Medicine 500, Politics & Elections 460, Government Schemes 216, Crime & Public Safety 175), providing an expansive foundation for fine-tuning specialized Indic-specific checkpoints.
