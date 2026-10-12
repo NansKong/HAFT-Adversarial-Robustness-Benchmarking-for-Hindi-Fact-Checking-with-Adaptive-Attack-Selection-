@@ -43,7 +43,7 @@ Thumbs.db
 .commandcode/
 
 # TeX & LaTeX compilation files (manuscript managed on Overleaf / submission system)
-*.tex
-*.bib
-*.bst
-*.sty
+# *.tex
+# *.bib
+# *.bst
+# *.sty

@@ -1,0 +1,85 @@
+% =========================================================================
+% HAFT ICLR 2027: VERIFIED TABLES (MATCHING REPO GROUND TRUTH & PDF ARTIFACTS)
+% Strictly derived from results/full_run/llm_comparison.csv and the verified PDF.
+% =========================================================================
+
+% --- TABLE 2: MEASURED ATTACK TAXONOMY (ARITHMETIC FIX ONLY) ---
+% Fixes the 16/6 arithmetic bug to match the verified 14 rule / 8 LLM split.
+\begin{table}[t]
+\centering
+\small
+\caption{Measured attack taxonomy across 4 hierarchical families and execution arms.}
+\label{tab:attack_taxonomy}
+\begin{tabular}{lll}
+\toprule
+\textbf{Family} & \textbf{Attack Mechanisms} & \textbf{Execution Arm} \\
+\midrule
+Character (5) & Swapping, repetition, insertion, deletion, homoglyph perturbation & 5 rule / 0 LLM \\
+Word (6) & Entity disambiguation, jumbling, typos, lexical substitution, synonyms, phonetics & 6 rule / 0 LLM \\
+Sentence (5) & Lexically-informed rewrite (rule), fact mixing, trigger, colloquial, claim rewrite & \textbf{1 rule / 4 LLM} \\
+Evidence (6) & Imperceptible verification, syntactic omission, AdvAdd, ContextReplace, Fact2Fiction, retrieval noise & 2 rule / 4 LLM \\
+\midrule
+\textbf{Total (22)} & \textbf{22 distinct perturbation mechanisms} & \textbf{14 rule / 8 LLM} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% --- TABLE 3: EMPIRICAL EVALUATION OF 22 MEASURED ATTACKS (VERIFIED NUMBERS) ---
+% Exact values from results/full_run/llm_comparison.csv matching the PDF.
+\begin{table*}[t]
+\centering
+\scriptsize
+\caption{Empirical evaluation of all 22 measured attacks on 832 clean-baseline claims, sorted by Gated ASR.}
+\label{tab:full_22_attacks}
+\begin{tabular}{llcccc}
+\toprule
+\textbf{Attack Mechanism} & \textbf{Attack Family} & \textbf{Execution Arm} & \textbf{Raw ASR (\%)} & \textbf{Gated ASR (\%)} & \textbf{Empirical Tier} \\
+\midrule
+Contextualized Evidence Replace & Evidence-level & LLM-based & 63.52\% & 59.57\% & POS \\
+Poisoned Evidence Addition (AdvAdd) & Evidence-level & LLM-based & 61.00\% & 58.47\% & POS \\
+Agentic Fictional Evidence (Fact2Fiction) & Evidence-level & LLM-based & 61.33\% & 57.60\% & POS \\
+Fact Mixing (CA\_06) & Sentence-level & LLM-based & 59.82\% & 55.81\% & POS \\
+Masked Token Claim Rewrite & Sentence-level & LLM-based & 28.49\% & 25.39\% & MID \\
+Syntactic Omission & Evidence-level & Rule-based & 21.72\% & 19.62\% & MID \\
+Word Jumbling & Word-level & Rule-based & 12.57\% & 12.57\% & NEG \\
+Adversarial Trigger Ingestion & Sentence-level & LLM-based & 18.25\% & 4.28\% & NEG \\
+Character Insertion & Character-level & Rule-based & 4.35\% & 3.63\% & NEG \\
+Synonym Replacement & Word-level & Rule-based & 4.73\% & 3.59\% & NEG \\
+Character Deletion & Character-level & Rule-based & 7.73\% & 3.30\% & NEG \\
+Phonetic Perturbation & Word-level & Rule-based & 3.75\% & 3.25\% & NEG \\
+Typos \& Misspellings & Word-level & Rule-based & 3.44\% & 2.95\% & NEG \\
+Homoglyph Perturbation & Character-level & Rule-based & 3.12\% & 2.75\% & NEG \\
+Lexical Substitution & Word-level & Rule-based & 2.95\% & 2.47\% & NEG \\
+Character Repetition & Character-level & Rule-based & 3.79\% & 2.46\% & NEG \\
+Colloquial Rephrasing & Sentence-level & LLM-based & 3.81\% & 2.43\% & NEG \\
+Character Swapping & Character-level & Rule-based & 7.24\% & 1.85\% & NEG \\
+Lexically Informed Rewrite & Sentence-level & Rule-based & 2.45\% & 1.39\% & NEG \\
+Imperceptible Verification Noise & Evidence-level & Rule-based & 3.25\% & 0.40\% & NEG \\
+Imperceptible Retrieval Noise & Evidence-level & LLM-based & 2.66\% & 0.26\% & NEG \\
+Entity Disambiguation & Word-level & Rule-based & 0.00\% & 0.00\% & NEG \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+% --- TABLE 6: CROSS-MODEL TRANSFER AUDIT (LLAMA 3 70B) WITH SUBTOTAL ---
+% Adds only the missing verified subtotal row (707 / 966 = 73.19%).
+\begin{table}[t]
+\centering
+\small
+\caption{Cross-model transfer audit on Meta Llama 3 70B Instruct across 6 LLM-generated attack arms.}
+\label{tab:cross_model_transfer}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Attack Mechanism} & \textbf{Execution Arm} & \textbf{Audited} & \textbf{Confirmed} & \textbf{Transfer ASR} \\
+\midrule
+Agentic Fictional Evidence (Fact2Fiction) & LLM-Generated & 200 & 200 & 100.00\% \\
+Poisoned Evidence Addition (AdvAdd) & LLM-Generated & 200 & 199 & 99.50\% \\
+Contextualized Evidence Replace & LLM-Generated & 200 & 179 & 89.50\% \\
+Masked-Token Claim Rewrite & LLM-Generated & 164 & 121 & 73.78\% \\
+Imperceptible Retrieval Noise & LLM-Generated & 2 & 1 & 50.00\% \\
+Fact Mixing (CA\_06) & LLM-Generated & 200 & 7 & 3.50\% \\
+\midrule
+\textbf{Total Live LLM Audits} & \textbf{All 6 LLM Arms} & \textbf{966} & \textbf{707} & \textbf{73.19\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
