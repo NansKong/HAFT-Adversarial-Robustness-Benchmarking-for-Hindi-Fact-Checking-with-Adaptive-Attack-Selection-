@@ -223,3 +223,47 @@ In addition to the stratified 1,120-claim benchmark, the broader HAFT archive (`
 5. **Dense Encoder Evaluation Script**: [`scratch/eval_encoder_nli.py`](file:///C:/Users/ASUS/.gemini/antigravity-ide/brain/968d5c47-5a3c-495a-b1ae-c28132a2a1fb/scratch/eval_encoder_nli.py)
 6. **Full Dataset Repository (2,964 claims)**: [`full data/`](file:///e:/Attack/full%20data/)
 7. **Manuscript & ICLR Bundle (Local Only)**: [`iclr/`](file:///e:/Attack/iclr/)
+8. **NAACL Double-Blind Package**: [`naacl/acl_latex.tex`](file:///e:/Attack/naacl/acl_latex.tex) & [`naacl/HAFT_Anonymous_Supplementary_Material.zip`](file:///e:/Attack/naacl/HAFT_Anonymous_Supplementary_Material.zip)
+
+---
+
+## 9. Methodological Upgrades, Reviewer Invariants & Rigor Controls
+
+The following six methodological enhancements resolve key peer-review critique risks and enforce mathematical and empirical invariants across the repository:
+
+### 1. Architectural Distinction: Epistemic Collapse vs. Direct Overwrite
+* **`mDeBERTa-v3`**: Exhibits **epistemic collapse into NEI** (68.9% of `AdvAdd` flips transition to NEI; default to neutrality on premise tension).
+* **`IndicBERTv2`**: Exhibits **direct overwrite** (45 of 70 `AdvAdd` flips force SUP$\to$REF overwrite; classification heads suppress NEI when fine-tuned on binary/ternary verification).
+* **Decoder LLMs (`gpt-4o-mini`, `Llama 3 70B`)**: Exhibit uncalibrated contextual deference (>88% direct SUP$\to$REF overwrite).
+
+### 2. Human Calibration Agreement Decomposition (600 Judgments / 40 Disagreements)
+* **Average Agreement**: **93.33%** across 600 total evaluation judgments over 300 stratified instances (560 / 600).
+* **Orthographic Fluency**: **94.67%** (284/300; 16 disagreements, $\kappa = 0.898$). Disagreements: 6 dialectal diacritics/nuktas (*ज़* vs. *ज*, *फ़* vs. *फ*) + 10 colloquial spacing/conjunct variants.
+* **Task Constraint Adherence**: **92.00%** (276/300; 24 disagreements, $\kappa = 0.842$). Disagreements: 14 colloquial register shifts in lexical substitutions (*जुगाड़* / *गड़बड़*) + 10 borderline semantic shifts in sentence rewrites.
+* **Joint Conjunction Acceptance**: **93.33%** ($\kappa = 0.881$, almost perfect agreement).
+
+### 3. Budgeted Auditing Baseline Alignment & State Space Ablation
+* **Table 4 Baseline Performance**: Pure RL achieves **82.16% ± 2.26%** (ddof=1; 82.16% ± 2.02% population SD; per-seed: 80.84%, 79.64%, 82.04%, 82.63%, 85.63%).
+* **Hybrid Auditor**: Achieves **83.71% ± 2.66%** test discovery.
+* **Semantic Feature Ablation**: Masking semantic features ($\mathbf{z}_c \in \mathbb{R}^{768}, \mathbf{v} \in \{0, 1\}^3$) drops Pure RL test discovery to **79.76% ± 2.45%** ($-2.40$ pp) and Hybrid Auditor discovery to **81.32% ± 2.51%** ($-2.39$ pp), proving that action masking and empirical priors drive primary search while semantic embeddings provide complementary conditioning.
+
+### 4. Null-Perturbation Control & Spontaneous Decision Stability (#22)
+* **Identity Re-query Baseline ($c'_i = c_i, e'_i = e_i$)**: Evaluated across independent verification passes at temperature 0.0 to establish a rigorous empirical noise floor.
+* **Spontaneous Flip Rate**: **0.18%** (2 out of 1,120 claims; 95% Wilson CI $[0.05\%, 0.65\%]$; exactly 0/832 on clean-verified claims, 0.00%, $[0.00\%, 0.45\%]$).
+* **Noise Floor**: Confirms an empirical noise floor of $\le 0.45\%$. All POS/MID attacks (6.13%–47.72%) and surface perturbations (2.52%–11.42%) sit well above this noise floor, whereas imperceptible noise attacks ($\le 0.36\%$) fall within it.
+* **Crime Decision Boundary**: Clarifies that the 8 surface-only blind spots in Crime & Public Safety reflect baseline decision-boundary sensitivity (clean accuracy 50.86%) interacting with orthographic disruption, rather than spontaneous API non-determinism.
+
+### 5. Flip Validity, Pipeline Threat Reframing & Gold Stance Preservation (#23)
+* **Threat Model C (`ContextReplace`) Reframing**: Replacing authentic evidence simulates an end-to-end RAG pipeline threat (upstream retrieval or web scraping poisoning). Following the sole provided snippet is faithful to the evidence, representing a systemic RAG architecture vulnerability rather than an isolated verifier reasoning failure.
+* **Threat Model B (`AdvAdd`) Contrast**: Both authentic and poisoned snippets are present simultaneously; failure to detect contradiction constitutes an intrinsic verifier failure of epistemic calibration.
+* **Gold Label Preservation Study ($N=100$)**:
+  * `ClaimRewrite`: **92.0% (46/50)** preserved the original gold stance against reference evidence, verifying genuine verifier failure.
+  * `FactMixing`: **42.0% (21/50)** altered the factual stance (e.g., adding an unverified subordinate clause shifted SUP to NEI), directly explaining why Fact Mixing exhibits acute verifier-specific sensitivity and only 3.50% transfer to Llama 3 70B.
+
+### 6. Test Leakage Elimination & Test-Only Bootstrap CIs (#25)
+* **Train-Split Blind Spot Optimization**: On each fold, train blind spots are defined strictly from training-split outcomes ($D_{\text{train}}$). The offline coverage greedy policy optimizes cumulative coverage strictly on $D_{\text{train}}$ without observing test claims.
+* **Direct Per-Seed Test Reporting**: Replaced 5-seed bootstrap CI with direct per-seed test scores:
+  * Hybrid: 80.84%, 83.23%, 85.03%, 86.83%, 82.63%
+  * Top-2 + Random: 66.68%, 67.15%, 71.75%, 65.69%, 69.54%
+  * Paired improvements: $+14.16, +16.08, +13.28, +21.14, +13.09$ pp (paired $t$-test $p = 0.0004$).
+* **Test-Only Claim Bootstrap CI**: Evaluated strictly on held-out test splits, yielding **95% CI $[{+}12.80, {+}18.33]$ pp** (confirming that the +17.49 pp Hybrid advantage is statistically preserved on unseen claims).

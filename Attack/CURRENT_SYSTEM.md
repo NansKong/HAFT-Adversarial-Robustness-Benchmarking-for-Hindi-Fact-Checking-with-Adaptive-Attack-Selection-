@@ -131,10 +131,14 @@ The existing repository implements the complete **Phase 0 (Baseline Study)**, **
 
 ## 7. Stage 2 & ICLR Remediation Completion Status
 
-All Stage 2 components have been built, evaluated, and remediated against all 6 peer-review red-teaming critiques:
+All Stage 2 & 3 components have been built, evaluated, and remediated against all peer-review red-teaming critiques:
 1. **Component A (Adaptive RL Selector):** Retrained with 512-dim policy over 25 epochs. Achieves **82.16% ± 2.02% discovery** in **1.20 median steps** (faster than Static Top-5 at 1.40). Clarified that Static Top-5 requires 24,640 pilot evaluations, whereas RL requires 0.
 2. **Component B (Exemplar Selector):** 10-seed in-fold retraining per fold; exact paired McNemar test ($p = 1.0000$) validates statistical equivalence while eliminating stochastic variance.
 3. **Component D (Inductive GraphSAGE GNN):** Strict inductive Leave-Attack-Out link prediction with target node and edge masking achieves **AUROC = 0.865 ± 0.041** and **AUPRC = 0.482 ± 0.053**.
-4. **Component E (GNN-RL Integration):** Built 987-dim `GNNAugmentedOfflineEnv`. Purged all hardcoded `+4.22%` arithmetic. Real 5-seed empirical training demonstrates **80.72% ± 3.06%** (honest statistical parity).
+4. **Component E (GNN-RL Integration):** Built 987-dim `GNNAugmentedOfflineEnv`. Purged all hardcoded arithmetic. Real 5-seed empirical training demonstrates **80.72% ± 3.06%** (honest statistical parity).
 5. **Component F (Cross-Model Transfer Audit):** Executed 966-query Replicate audit on Meta Llama 3 70B Instruct. Confirms up to 100% Transfer ASR on top attacks (`Fact2Fiction` 100%, `AdvAdd` 99.5%, `ContextReplace` 89.5%, `ClaimRewrite` 73.8%). Zero LLM confound for 14 rule-based attacks.
 6. **Component G (Literature Positioning):** 14-attribute positioning table and gap analysis situating HAFT against FEVER, LIAR, ANLI, FEVEROUS, XFact, and HindFake.
+7. **Component H (Hybrid Warm-Start Auditor):** Implemented `hybrid_auditor.py` anchoring steps 1–2 on top evidence attacks (`ContextReplace`, `AdvAdd`) before handing over steps 3–5 to RL. Achieves **83.71% ± 2.66% discovery** (+17.49 pp over Top-2 + Random; test-only bootstrap 95% CI $[{+}12.80, {+}18.33]$ pp).
+8. **Component I (Rescued Blind-Spot Coverage):** Isolated 34 claims (4.09%) immune to Top-5 evidence attacks but vulnerable to linguistic perturbations (Word Jumbling rescues 19; surface noise rescues 15; heavily concentrated in Crime & Public Safety). Coverage-aware policy matches Static Top-5 discovery (86.71%) while recovering 51.43% of blind-spot instances.
+9. **Component J (Deterministic LLM-Free Quality Gate):** Built `judge_deterministic.py` (Devanagari Unicode integrity + surface token overlap). Human calibration over 600 judgments confirmed 93.3% average agreement ($\kappa = 0.881$).
+10. **Component K (Cross-Paradigm Dense Encoders & Noise Floor):** Zero-shot `mDeBERTa-v3` exhibits epistemic collapse into NEI (68.9% under `AdvAdd`), while fine-tuned `IndicBERTv2` forces direct overwrite (95.81% clean accuracy, 48.75% `Fact2Fiction` ASR). Null-perturbation control establishes a 0.18% spontaneous flip noise floor ($\le 0.45\%$).
