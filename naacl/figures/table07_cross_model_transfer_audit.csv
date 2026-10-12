@@ -1,0 +1,11 @@
+Attack Mechanism,Execution Arm,Pairs Audited,Llama 3 70B Confirmed,Transfer ASR,Cross-Architecture Generalization
+Agentic Fictional Evidence (Fact2Fiction),LLM-Generated,200,200,100.00%,Universal cross-architecture transfer
+Poisoned Evidence Addition (AdvAdd),LLM-Generated,200,199,99.50%,Universal cross-architecture transfer
+Contextualized Evidence Replace,LLM-Generated,200,179,89.50%,High cross-architecture transfer
+Masked-Token Claim Rewrite,LLM-Generated,164,121,73.78%,Moderate-high transfer
+Imperceptible Retrieval Noise,LLM-Generated,2,1,50.00%,Small sample size (2 audited instances)
+Fact Mixing (CA_06),LLM-Generated,200,7,3.50%,Model-specific divergence (Llama 3 robust to fact mixing)
+Total Live LLM Audits,All 6 LLM Arms,966,707,73.19%,Matches raw Replicate JSONL logs (966 live completions)
+Syntactic Omission (EA_OMITOMISSION_01),Rule-Based,N/A,N/A,N/A,Deterministic Python transform; 0 LLM confound by construction
+Imperceptible Verification Noise,Rule-Based,N/A,N/A,N/A,Deterministic Python transform; 0 LLM confound by construction
+14 Surface Rule Transformations,Rule-Based,N/A,N/A,N/A,Deterministic Python transforms; 0 LLM confound by construction

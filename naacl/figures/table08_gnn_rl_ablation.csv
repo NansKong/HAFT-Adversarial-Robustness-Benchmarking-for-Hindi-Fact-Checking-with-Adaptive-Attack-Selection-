@@ -1,0 +1,6 @@
+Ablation Configuration,State Dims,Claims Evaluated,Discovery Rate (5 Seeds),Median Steps,Delta vs Flat RL
+Flat RL Selector (Reference Standard),859-dim,832 claims,82.16% ± 2.02%,1.20,Reference Standard
+GNN-Augmented State (GraphSAGE),987-dim,832 claims,80.72% ± 3.06%,1.20,"-1.44 pp (Statistical Parity, p=0.443)"
+RL w/o API Cost Penalty,859-dim,832 claims,82.51% ± 2.44%,1.20,"+0.35 pp (+0.359% unrounded, negligible)"
+"RL w/o Exploration (Greedy, eps=0)",859-dim,832 claims,84.67% ± 2.67%,1.00,+2.51 pp (Greedy exploitation in frozen replay)
+Full Dataset (Incl. 288 clean failures),859-dim,"1,120 claims",59.29% ± 0.95%,1.00,-22.87 pp (Confounded population shift)

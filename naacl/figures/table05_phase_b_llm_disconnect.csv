@@ -1,0 +1,7 @@
+Model,Architecture Class,Zero-Shot Accuracy,Agreement with Consensus,Key Failure Mode
+OpenAI GPT-4o,Proprietary Dense / MoE,27.27% (6/22),High (90.9%),Overestimated character typos (<3.5% ASR); predicted POS
+Anthropic Claude 3.5 Sonnet,Proprietary Dense,27.27% (6/22),High (86.4%),Overestimated character swapping; missed evidence vulnerability
+Moonshot Kimi Chat,Proprietary Long-Context MoE,27.27% (6/22),High (90.9%),Shared Western typographic bias across all categories
+Sarvam AI (Indic),Indic-Specialized Pretrained,40.91% (9/22),Moderate (59.1%),Better Hindi lexical grounding; recognized colloquial resilience
+DeepSeek-V3,Open-Weights MoE,72.73% (16/22),Moderate (54.5%),Strong reasoning; correctly identified evidence tampering vulnerability
+5-Model Majority Consensus,Ensemble Majority Vote,27.27% (6/22),100.0%,Majority voting amplifies shared structural bias rather than resolving it

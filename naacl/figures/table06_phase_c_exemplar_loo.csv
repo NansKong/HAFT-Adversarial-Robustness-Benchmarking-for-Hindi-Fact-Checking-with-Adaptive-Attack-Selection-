@@ -1,0 +1,10 @@
+Selection Strategy,Exemplars Used,LOO Accuracy,Correct / 22,Macro-F1,Significance vs Random-5
+Zero-Shot Baseline,0.0,27.27%,6 / 22,0.444,Uncalibrated lower bound
+Always-NEG Baseline,0.0,72.73%,16 / 22,0.281,Majority baseline; F1 collapses under skew
+Attribute-Only Heuristic,0.0,54.55%,12 / 22,0.581,Heuristic projection without in-context exemplars
+Few-Shot (All 21 Exemplars),21.0,95.45%,21 / 22,0.952,Full-context upper bound (maximum prompt cost)
+Random-5 Exemplars,5.0,95.45%,21 / 22,0.952,Single-seed point estimate; high stochastic seed variance
+Top-5 Semantic Similarity,5.0,90.91%,20 / 22,0.911,Cosine similarity retrieval on IndicBERT representations
+Random-10 Exemplars,10.0,95.45%,21 / 22,0.952,Larger random subset baseline
+Top-10 Semantic Similarity,10.0,95.45%,21 / 22,0.952,Larger similarity baseline
+RL-Selected Policy (Ours),8.1 avg,90.91%,20 / 22,0.874,"Exact McNemar p = 1.0000; deterministic, 61.4% token reduction"

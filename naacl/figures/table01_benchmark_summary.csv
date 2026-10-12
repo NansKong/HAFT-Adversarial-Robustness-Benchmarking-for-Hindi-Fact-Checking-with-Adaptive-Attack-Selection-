@@ -1,0 +1,10 @@
+Property,Specification
+Target Language / Script,Native Hindi / Devanagari Script
+Benchmark Claims Scale,"1,120 claims (6 sensitive domains, 144 primary news publisher sources)"
+Gold Label Distribution,571 Supported (SUP) / 350 Refuted (REF) / 199 Not Enough Information (NEI)
+Evaluated Attack Inventory,"22 measured attacks (14 rule-based, 8 LLM-generated)"
+Perturbation Granularities,"5 character-level, 6 word-level, 5 sentence-level, 6 evidence-level"
+Phase A Total Evaluations,"24,640 attack evaluations (1,120 claims x 22 attacks) + 1,120 clean baseline = 25,760"
+Clean Verifier Accuracy,74.29% correct (832 eligible claims; 288 clean failures isolated from denominator)
+Annotation Quality Check,"300 double-annotated claims, 96.7% raw agreement, Cohen's kappa k = 0.946"
+Master Attack Catalog,"53 total literature attacks (22 measured, 31 unmeasured candidate attacks)"
