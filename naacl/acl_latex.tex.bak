@@ -1,0 +1,332 @@
+\documentclass[11pt]{article}
+
+% NAACL 2025/2026 Review Version (Double-blind submission)
+\usepackage[review]{acl}
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumitem}
+\setlist{itemsep=0.5pt,topsep=1.5pt,parsep=0pt,partopsep=0pt}
+\usepackage{xcolor}
+
+\graphicspath{{figures/}{./}}
+
+\title{HAFT: Adversarial Robustness Benchmarking and Budgeted Adaptive Auditing for Hindi Automated Fact-Checking}
+
+\author{Anonymous NAACL Submission \\
+  Track: Fact-Checking, Adversarial NLP, and Multilinguality \\
+  Paper under Double-Blind Review}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Automated fact-checking (AFC) in Hindi---one of the world's most widely spoken languages, yet critically under-resourced in NLP safety benchmarks---is acutely vulnerable to disinformation. We introduce \textbf{HAFT}, an adversarial benchmark spanning 1,120 Hindi claims across six civic domains and 22 attacks (24,640 evaluations; 18,304 over clean claims) with automated quality gating. Verifiers exhibit evidence-overwrite failure under evidence injection (Threat Model B), flipping 41.0--47.7\% of claims, with 96.33\% of audited evidence failures (578/600) reproducing on Llama 3 70B. Character perturbations achieve under 3.5\% ASR on the evaluated decoder verifier, consistent with subword robustness. Under budgeted auditing ($K \le 5$), static top-5 rankings exploit dominant evidence attacks but leave systematic long-tail blind spots: 34 identified claims (4.09\%) resist all top-five attacks; excluding word jumbling leaves 20 claims (2.40\%), with 15 (1.80\%) collapsing strictly under surface edits. The \textbf{Hybrid Warm-Start Auditor} achieves 83.71\% $\pm$ 2.66\% discovery (+17.49 pp over warm-start random; 37.0 rescues per split). Crucially, unconstrained RL yields 0\% recall across 35 seed-level blind-spot evaluation instances, whereas a coverage-aware policy recovers 51.43\% (18/35) while matching Static Top-5's 86.71\% average discovery, demonstrating that average-case reward optimization alone does not ensure vulnerability coverage.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Automated fact-checking (AFC) aims to assess the veracity of factual assertions against retrieved evidence documents \citep{thorne2018fever,schuster2021vitaminc}. While multilingual corpora such as X-Fact \citep{gupta2021xfact} and regional benchmarks \citep{kumar2022hindi} have expanded evaluation to Indic languages, existing testbeds evaluate classification accuracy solely on clean, unperturbed text. Recent investigations reveal that modern NLP pipelines fail catastrophically when adversaries perturb claims, manipulate retrieved documents, or corrupt evidence alignment \citep{wang2021textflint,liu2025adversarial}. Despite these acute vulnerabilities, to the best of our knowledge, no existing benchmark provides an Indic adversarial testbed, a controlled taxonomy across linguistic levels, reproducible quality gating, and sequential budgeted attack selection.
+
+HAFT addresses this gap by formalizing a 22-attack quality-controlled benchmark over 1,120 real-world Hindi claims and evaluating budgeted defensive auditing. In low-resource public-interest auditing, defensive red-teaming operates under strict query budgets: a fact-checking organization verifying streaming claims cannot afford brute-force evaluation across dozens of attack tools per claim against commercial or rate-limited LLM verification endpoints. However, attack selection that maximizes average vulnerability discovery does not necessarily maximize vulnerability coverage: a fixed global ranking that repeatedly fires high-ASR attacks achieves high average-case yield, but systematically under-covers claim-specific vulnerabilities in the long tail. Budgeted auditing therefore requires balancing average yield with adaptive, coverage-aware exploration.
+
+
+HAFT investigates three foundational research questions:
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{RQ1 (Vulnerability Measurement).} Which adversarial mechanisms cause reliable failures in Hindi automated fact-checking, and how do frontier LLMs perceive Hindi vulnerability?
+\item \textbf{RQ2 (Quality Gating and Cross-Model Consensus).} Do measured vulnerabilities reflect cross-architecture vulnerabilities or model-family artifacts of a specific verifier?
+\item \textbf{RQ3 (Budgeted Defensive Auditing).} How can an auditor discover claim vulnerabilities under a constrained verifier query budget ($K \le 5$ of 22 attempts), and how does adaptive exploration compare with fixed empirical attack rankings?
+\end{itemize}
+
+Our principal empirical contributions are:
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{A measured Hindi adversarial benchmark}: 1,120 claims across 6 sensitive civic domains, 22 controlled attacks, and 24,640 total verifier evaluations (18,304 evaluations across the 832 verified clean-correct claims) with authentic journalistic evidence across 144 primary publisher sources.
+\item \textbf{Asymmetric vulnerability and frontier LLM disconnect}: Evidence-context manipulation (41.0--47.7\% unconditional ASR) is substantially more damaging than character perturbations ($<$3.5\% unconditional ASR). GPT-4o, Claude 3.5 Sonnet, and Kimi-k1.5 achieve only 27.27\% accuracy and 0\% recall on NEG attacks in zero-shot attack-tier prediction.
+\item \textbf{Empirical identification of non-top vulnerabilities}: Static top-5 empirical rankings suffer from blind spots: 34 unique claims (4.09\% of clean baseline claims) are completely immune to all top-5 empirical arms, but collapse under non-top perturbations; excluding word jumbling leaves 20 unique claims (2.40\%), of which 15 claims (1.80\%) collapse strictly under fine-grained surface character, phonetic, and typo edits (excluding syntactic omission), significantly concentrated in Crime \& Public Safety (Bonferroni $p = 0.0402$).
+\item \textbf{The Hybrid Warm-Start Auditor and Diagnostic Evaluation}: A sequential policy combining empirical priors (Steps 1--2) with reinforcement learning adaptation (Steps 3--5), achieving 83.71\% $\pm$ 2.66\% vulnerability discovery (+17.49 pp over warm-start random; 95\% bootstrap CI $[{+}14.97, {+}20.00]$ pp; 37.0 rescues per split). Static Top-5 serves as an offline benchmark for average-case discovery rather than an adaptive deployment policy, since its attack distribution is fixed globally and does not condition on claim-level audit outcomes. Our primary finding is not that reinforcement learning outperforms a fixed attack ranking, but that attack-selection objectives optimized for average discovery systematically under-cover claim-specific vulnerabilities (yielding 0\% recall across 35 seed-level blind-spot evaluation instances, compared to 22.86\% under random exploration), whereas a coverage-aware policy recovers 51.43\% (18/35).
+\item \textbf{Cross-architecture consensus and verifier diagnosis}: We reduce evaluator subjectivity through a pure-Python deterministic gate, accompanied by an independent 966-query audit on Meta Llama 3 70B confirming 73.19\% overall transfer (and 96.33\% across the 600-pair audited evidence-manipulation subset spanning Threat Models B and C: AdvAdd, Fact2Fiction, ContextReplace), diagnosing Fact Mixing as a verifier-specific sensitivity, and an evaluation across decoder and encoder architectures (\texttt{mDeBERTa-v3}, \texttt{IndicBERTv2}) revealing contrasting failure modes.
+\end{itemize}
+
+\section{Related Work}
+\label{sec:related}
+
+\textbf{Automated fact-checking.} Fact verification benchmarks originated in English with FEVER \citep{thorne2018fever} and LIAR \citep{wang2017liar}. \citet{schuster2021vitaminc} introduced VitaminC, formalizing contrastive evidence where factual modifications flip verifier predictions. Multilingual benchmarks such as X-Fact \citep{gupta2021xfact} and Hindi fake-news corpora \citep{kumar2022hindi} evaluate veracity classification on clean text, leaving adversarial vulnerability in Indic languages unmeasured. Pre-trained Indic encoders such as IndicBERT \citep{kakwani2020indicnlpsuite,doddapaneni2023indic} provide foundational multilingual representations.
+
+\textbf{Knowledge conflicts and RAG evidence poisoning.} In retrieval-augmented generation (RAG) and automated verification, knowledge conflicts arise when external retrieved contexts contradict internal parametric knowledge stored in LLM weights \citep{xie2024adaptive,xu2024clasheval,zou2024poisonedrag}. While English RAG investigations demonstrate that frontier LLMs often vacillate between parametric memory and contextual evidence, the dynamics in low-resource Indic languages remain largely unexamined. In Indic automated fact-checking, where parametric knowledge of regional and vernacular entities is sparse, verifiers do not reliably express uncertainty when authentic and injected evidence conflict: rather than flagging unverified claims as conflicting or abstaining with an indeterminate verdict (NEI), verifiers uncritically defer to injected evidence, producing near-total verdict overwrite.
+
+\textbf{Adversarial attacks on fact-checking.} \citet{liu2025adversarial} and \citet{wang2021textflint} survey adversarial fact-checking and NLP robustness. Evidence-poisoning techniques include AdvAdd \citep{du2022synthetic}, Fact2Fiction \citep{fact2fiction2026}, Fact-Saboteurs \citep{abdelnabi23usenix}, and evidence omission \citep{atanasova2022fact}. HAFT adapts these mechanisms to Hindi Devanagari alongside 14 deterministic rule-based algorithms under uniform quality control.
+
+\textbf{Reinforcement learning for selective auditing.} Policy optimization has been applied to select knowledge subgraphs \citep{zhang2024akafake} and filter training samples \citep{yang2024reinforcement}. In contrast, HAFT deploys offline policy optimization \citep{williams1992reinforce,sutton2000policy} to sequentially select adversarial attack mechanisms under a constrained testing budget.
+
+\section{The HAFT Benchmark and Threat Model}
+\label{sec:benchmark}
+
+\subsection{Task and Threat Models}
+Each benchmark instance is a tuple $x_i = (c_i, e_i, y_i)$, comprising a Hindi claim $c_i$, evidence text $e_i$, and ground-truth stance $y_i \in \{\mathrm{SUP}, \mathrm{REF}, \mathrm{NEI}\}$ (Supported, Refuted, Not Enough Info). The clean verifier predicts $\hat{y}_i = V(c_i, e_i)$. Throughout our 24,640 benchmark evaluations, the primary verifier $V$ is \texttt{gpt-4o-mini} (OpenAI, temperature 0.0, top\_p 1.0, deterministic greedy decoding), selected for its strong instruction following and multilingual capabilities. Independent transfer verification is audited on open-weight \texttt{Meta-Llama-3-70B-Instruct} (Section~\ref{sec:transfer}). An attack generates perturbed text $(c'_{ij}, e'_{ij}) = A_j(c_i, e_i)$, yielding attacked verdict $\hat{y}_{ij} = V(c'_{ij}, e'_{ij})$. A raw flip occurs when $\hat{y}_{ij} \neq \hat{y}_i$.
+
+Our attack taxonomy originated from an initial comprehensive catalogue of 53 candidate adversarial mechanisms across Devanagari morphology, syntax, semantics, and evidence tampering. To ensure rigorous, uniform evaluation within feasible computational budgets, we prioritized 22 representative attack mechanisms spanning all threat models and linguistic granularities for exhaustive benchmarking across all 1,120 claims (24,640 total verifier evaluations; Table~\ref{tab:attacks}); the remaining 31 candidate mechanisms represent unmeasured prioritization hypotheses for future expansions (see the Limitations section).
+
+We delineate adversary capabilities into three distinct threat models:
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Threat Model A (Claim Manipulation)}: The adversary modifies the claim string ($c'_i \neq c_i, e'_i = e_i$). This encompasses two operational paradigms: (1) \emph{Intent-Preserving Surface Invariance}, where the adversary introduces character-level orthographic noise, phonetic perturbations, typos, or synonym substitutions under strict meaning-preservation constraints; and (2) \emph{Semantic Claim Blending} (\texttt{FactMixing}), where the adversary synthetically merges the target claim with contradictory predicates from another claim, testing verifier sensitivity to composite assertions.
+\item \textbf{Threat Model B (Simulated Evidence-Context Injection)}: The adversary injects externally synthesized or poisoned passages into the retrieved evidence pool ($c'_i = c_i, e'_i = [e_i \,\|\, e_{\text{poison}}]$). \textbf{Authentic evidence is retained in the prompt}. In our benchmark, the injected passage is appended to authentic reference text without explicit source attribution tags, reflecting flat-context retrieval concatenation. Under ideal verification, when authentic publisher evidence conflicts with an unverified injected passage, a robust AFC system should either flag the contradiction, prioritize authenticated provenance, or output NEI. An adversarial failure occurs when the verifier uncritically yields to the injected passage and flips a true claim to REF.
+\item \textbf{Threat Model C (Direct In-Situ Evidence Tampering)}: The adversary modifies authentic evidence text in-situ ($c'_i = c_i, e'_i \neq e_i$; e.g., syntactic omission of qualifying clauses, contextual sentence replacement). In Threat Model C, the original evidence is tampered with (VitaminC-style), evaluating whether the verifier detects source manipulation.
+\end{itemize}
+
+\subsection{Dataset Provenance and Baseline Isolation}
+The benchmark consists of exactly 1,120 claims sampled across 6 diverse domains: Health \& Medicine (189), Politics \& Elections (189), Government Schemes (189), Disaster \& Breaking News (189), Celebrity News (189), and Crime \& Public Safety (175). Label distribution: 571 SUP (51.0\%), 350 REF (31.2\%), and 199 NEI (17.8\%). 
+
+Evidence passages reflect authentic reference texts curated from 144 primary verified sources (PIB Fact Check, BBC Hindi, Dainik Jagran, Alt News, WHO fact sheets) with live URL attribution. No publisher accounts for more than 13.9\% of the corpus (Amar Ujala 13.9\%, WHO 11.1\%, PIB 9.8\%, BBC Hindi 8.5\%). Publisher coverage spans 40 sources in Government Schemes, 37 in Celebrity News, 36 in Crime \& Public Safety, and 25 in Health \& Medicine; Disaster News and Politics \& Elections draw from 3 national wires and 8 political dailies respectively, reflecting centralized coverage in emergency and legislative reporting. To prevent label leakage, all editorial debunk banners, fact-check verdict titles, and conclusion headers (e.g., ``यह दावा गलत है'') were stripped from reference texts. NEI instances were constructed from verified journalistic reports covering the claim's topic without conclusive factual confirmation.
+
+\textbf{Dataset Splitting and Deduplication.} For offline RL policy training and budgeted benchmarking, claims are partitioned into 60\% train (499 claims), 20\% validation (166 claims, reserved for policy early stopping and checkpoint selection), and 20\% test (167 claims) splits over the 832 verified correct claims, stratified by civic domain to maintain identical domain proportions across folds. We repeat this across five fixed seeds ($42, 43, 44, 45, 46$). All 1,120 claims were verified via MinHash deduplication (Jaccard similarity $< 0.80$ on character 4-grams) to prevent event- or topic-level duplicate leakage between train and test splits.
+
+\textbf{Clean Baseline Isolation.} Clean verifier accuracy across all 1,120 claims is 74.29\% (832/1,120). Breaking down by gold stance reveals high accuracy on verifiable assertions: \textbf{85.46\% on SUP} (488/571) and \textbf{83.14\% on REF} (291/350), but \textbf{26.63\% on NEI} (53/199). This reflects a known inductive bias in LLMs toward forcing binary verdicts rather than abstaining \citep{atanasova2022fact}. Exactly 288 clean baseline failures are isolated into a separate denominator. An attack cannot legitimately flip a claim that the verifier fails on in clean form; benchmarking strictly over the 832 verified correct claims yields exactly $832 \times 22 = 18,304$ evaluated attack opportunities.
+
+\begin{table}[!t]
+\caption{Measured attack results across all 22 attacks in HAFT ($N=832$ clean-baseline claims; Primary Verifier: \texttt{gpt-4o-mini}). \textbf{Uncond.\ ASR} reports flips over all 832 claims alongside 95\% Wilson score confidence intervals. \textbf{Cond.\ ASR} conditions on successful, quality-passed perturbation generation ($N_{\text{eligible}} \in [592, 799]$).}
+\label{tab:attacks}
+\vskip 0.05in
+\centering
+\begingroup
+\renewcommand{\arraystretch}{0.90}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llrrrrl}
+\toprule
+Attack Mechanism & Family & Raw (\%) & Cond.\ (\%) & Uncond.\ (\%) & 95\% Wilson CI & Tier \\
+\midrule
+Poisoned evidence addition (AdvAdd) & Evid. (B) & 61.00 & 58.47 & \textbf{47.72} & [44.34, 51.11] & POS \\
+Contextualized evidence replace & Evid. (C) & 63.52 & \textbf{59.57} & 43.75 & [40.42, 47.14] & POS \\
+Fact mixing & Sent. (A) & 59.82 & 55.81 & 41.59 & [38.28, 44.97] & POS \\
+Agentic fictional evidence (Fact2Fiction) & Evid. (B) & 61.33 & 57.60 & 40.99 & [37.69, 44.36] & POS \\
+Masked-token claim rewrite & Sent. (A) & 28.49 & 25.39 & 19.71 & [17.15, 22.55] & MID \\
+Word jumbling & Word (A) & 12.57 & 12.57 & 11.42 & [ 9.43, 13.76] & NEG \\
+Syntactic omission & Evid. (C) & 21.72 & 19.62 & 6.13 & [ 4.69,  7.97] & NEG \\
+Character insertion & Char. (A) & 4.35 & 3.63 & 3.49 & [ 2.44,  4.96] & NEG \\
+Character deletion & Char. (A) & 7.73 & 3.30 & 2.88 & [ 1.95,  4.26] & NEG \\
+Typos \& misspellings & Word (A) & 3.44 & 2.95 & 2.76 & [ 1.85,  4.11] & NEG \\
+Adversarial trigger & Sent. (A) & 18.25 & 4.28 & 2.76 & [ 1.85,  4.11] & NEG \\
+Homoglyph perturbation & Char. (A) & 3.12 & 2.75 & 2.52 & [ 1.66,  3.83] & NEG \\
+Phonetic perturbation & Word (A) & 3.75 & 3.25 & 2.28 & [ 1.47,  3.54] & NEG \\
+Colloquial rewriting & Sent. (A) & 3.81 & 2.43 & 2.04 & [ 1.28,  3.25] & NEG \\
+Character repetition & Char. (A) & 3.79 & 2.46 & 1.92 & [ 1.19,  3.10] & NEG \\
+Lexical substitution & Word (A) & 2.95 & 2.47 & 1.80 & [ 1.10,  2.95] & NEG \\
+Character swapping & Char. (A) & 7.24 & 1.85 & 1.68 & [ 1.00,  2.80] & NEG \\
+Lexically informed rewrite & Sent. (A) & 2.45 & 1.39 & 1.08 & [ 0.57,  2.04] & NEG \\
+Synonym replacement & Word (A) & 4.73 & 3.59 & 0.72 & [ 0.33,  1.56] & NEG \\
+Imperceptible verification noise & Evid. (C) & 3.25 & 0.40 & 0.36 & [ 0.12,  1.05] & NEG \\
+Imperceptible retrieval noise & Evid. (B) & 2.66 & 0.26 & 0.24 & [ 0.07,  0.87] & NEG \\
+Entity disambiguation & Word (A) & 0.00 & 0.00 & 0.00 & [ 0.00,  0.46] & NEG \\
+\bottomrule
+\end{tabular}%
+}
+\endgroup
+\end{table}
+
+\subsection{LLM-Free Deterministic Quality Gating}
+A verifier flip constitutes a valid adversarial failure only if the generated text is fluent and preserves necessary task constraints. To prevent evaluator bias in quality assessment, we implement a dual-layer deterministic quality gate in pure Python:
+
+1. \textbf{Orthographic and Ligature Integrity}: Verifies Devanagari script integrity ($U{+}0900$--$U{+}097F$), rejects illegal stacked diacritics (consecutive vowel matras without a base consonant), rejects leading viramas (orphaned halants), and filters artificial character repetition ($\ge 4$ consecutive repeated aksharas/matras).
+
+2. \textbf{Deterministic Surface Invariance}: For meaning-preserving perturbations, we enforce lexical similarity via character $n$-gram $F$-scores (ChrF++ proxy, $n \in [2, 4]$) and token-level Jaccard similarity ($\text{ChrF} \ge 0.60$ or $J(x, x') \ge 0.50$). These gates prevent degenerative gibberish while recognizing that surface metrics do not guarantee truth-value invariance. For intentional meaning-drift attacks (e.g., evidence injection), the surface check is bypassed and orthographic fluency is enforced. Human calibration on 300 double-annotated instances by two native Hindi linguists confirmed 93.3\% inter-annotator agreement on grammatical fluency and task adherence ($\kappa = 0.881$).
+
+\section{Vulnerability Measurement \& Frontier Disconnect (RQ1)}
+\label{sec:measurement}
+
+Table~\ref{tab:attacks} reports results across all 22 measured attacks. Attacks are categorized into three empirical tiers: \textbf{POS} ($\text{ASR} \ge 40\%$), \textbf{MID} ($15\% \le \text{ASR} < 40\%$), and \textbf{NEG} ($\text{ASR} < 15\%$). All four top-tier (POS) attacks manipulate evidence or complex semantics: Poisoned Evidence Addition (`AdvAdd`) achieves 47.72\% unconditional ASR (58.47\% conditional), followed by Contextualized Evidence Replace (43.75\% uncond / 59.57\% cond), Fact Mixing (41.59\% uncond / 55.81\% cond), and Agentic Fictional Evidence (40.99\% uncond / 57.60\% cond).
+
+\textbf{Failure Analysis Under Conflicting Evidence.} Examining flip transitions reveals acute evidence-overwrite failures: under Poisoned Evidence Addition (\texttt{AdvAdd}), \textbf{88.2\% of flips (389/441 raw, 350/397 baseline-gated)} transition directly from $\text{Gold SUP} \to \text{Attacked REF}$, and under \texttt{Fact2Fiction}, \textbf{98.5\%} transition to REF. Only 0.7--0.8\% flip to NEI. In the conceptual framework of knowledge conflicts \citep{xie2024adaptive,xu2024clasheval}, this pattern is consistent with low-resource Indic AFC systems exhibiting extreme, uncalibrated contextual deference: when injected adversarial snippets contradict authentic evidence, the verifier does not reliably express uncertainty when authentic and injected evidence conflict, instead treating the fabricated assertions as decisive ground truth.
+
+To evaluate whether this vulnerability is attributable to prompt concatenation order or the absence of source tags, we conducted a controlled position $\times$ provenance pilot ($N=15$ claims, 60 live queries against \texttt{gpt-4o-mini}). Reversing the evidence order (\emph{Injected} passage placed first, followed by \emph{Authentic}) still produced a \textbf{100.0\% flip rate}, providing evidence against a pure recency/order artifact. Furthermore, prefixing explicit provenance tags (\texttt{सत्यापित स्रोत (Verified Archive)} vs.\ \texttt{अपुष्ट बाहरी स्रोत (Unverified Forward)}) still flipped \textbf{100.0\% of claims} (with only 20\% shifting to NEI under inverted order), suggesting that the observed vulnerability is not explained solely by passage ordering or the absence of provenance tags.
+
+In sharp contrast, all five character-level perturbations achieve $<$3.5\% unconditional ASR. This pattern is consistent with the robustness of subword and byte-level representations to localized character perturbations. As shown in Table~\ref{tab:attacks}, the gap between the POS tier ($>40\%$) and the NEG tier ($<3.5\%$) exceeds 37 percentage points unconditionally ($>50$ pp conditionally), substantially exceeding the corresponding 95\% Wilson confidence intervals for both tiers.
+
+\begin{table}[!t]
+\caption{Zero-shot attack tier prediction across 5 frontier LLMs ($N=22$ attacks: 16 NEG, 4 POS, 2 MID). Pred Distribution reports predicted counts [POS / MID / NEG].}
+\label{tab:llm_metrics}
+\vskip 0.05in
+\centering
+\resizebox{\columnwidth}{!}{%
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{llrrrrr}
+\toprule
+Model & Origin & Acc (\%) & Bal.\ Acc & Macro $F_1$ & Cohen's $\kappa$ & Pred [P/M/N] \\
+\midrule
+GPT-4o & US & 27.27 & 66.67 & 28.03 & 0.158 & 11 / 11 / \phantom{0}\textbf{0} \\
+Claude 3.5 Sonnet & US & 27.27 & 66.67 & 28.15 & 0.146 & 14 / \phantom{0}8 / \phantom{0}\textbf{0} \\
+Kimi-k1.5 & China & 27.27 & 66.67 & 28.03 & 0.158 & 11 / 11 / \phantom{0}\textbf{0} \\
+Sarvam AI & India & 40.91 & 58.33 & 39.50 & 0.169 & 13 / \phantom{0}4 / \phantom{0}5 \\
+DeepSeek-V3 & China & \textbf{72.73} & \textbf{87.50} & \textbf{70.09} & \textbf{0.545} & \phantom{0}5 / \phantom{0}7 / 10 \\
+\midrule
+\multicolumn{2}{l}{\emph{Majority (Always NEG)}} & 72.73 & 33.33 & 28.07 & 0.000 & \phantom{0}0 / \phantom{0}0 / 22 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\textbf{Frontier LLM Zero-Shot Disconnect.} We surveyed 5 frontier models across diverse geographic provenance (US: GPT-4o, Claude 3.5 Sonnet; China: DeepSeek-V3, Kimi-k1.5; India: Sarvam AI) to predict attack feasibility zero-shot (Table~\ref{tab:llm_metrics}). Western and Asian frontier models (GPT-4o, Claude 3.5, Kimi) achieve only 27.27\% accuracy (6/22), with a \textbf{0.0\% recall on NEG attacks} (predicting 0 of 16 actual NEG attacks as NEG; Cohen's $\kappa \le 0.158$), consistently overestimating character typos and lexical substitutions. In contrast, DeepSeek-V3 achieves 72.73\% accuracy (Balanced Acc 87.50\%, Macro $F_1$ 70.09\%, $\kappa = 0.545$) by correctly identifying 10 of 16 NEG attacks, matching the raw accuracy of the trivial Always-NEG majority baseline (72.73\%, 16/22 attacks). Sarvam AI achieves 40.91\% accuracy (Balanced Acc 58.33\%, Macro $F_1$ 39.50\%).
+
+\section{Budgeted Defensive Auditing (RQ3)}
+\label{sec:auditing}
+
+In practical defensive auditing, a security auditor operates under a tight verifier query budget $K \le 5$ (a 77.27\% reduction in LLM verification API calls relative to exhaustive 22-attack evaluation).
+
+\subsection{The Rescued Blind-Spot Discovery}
+A static heuristic selecting the top-5 empirical arms discovers 84.62\% (704/832) of vulnerabilities across the full clean corpus, and 86.71\% $\pm$ 1.30\% averaged across five held-out test splits. However, because evidence attacks dominate, static ranking exhibits a systematic coverage limitation: it is completely blind to non-top perturbations.
+
+We conducted a per-claim discrepancy analysis across all 832 clean claims. While Static Top-5 discovers flips on 704 claims (84.62\%), it produces \textbf{zero flips on 128 claims}. Among these blind spots, \textbf{exactly 34 unique claims (4.09\% of clean baseline claims, 3.04\% of the 1,120 corpus)} are completely immune to all top-5 empirical arms, but collapse under linguistic and syntactic perturbations. These blind spots expose a fundamental limitation of optimizing only average vulnerability discovery: the globally strongest attacks need not provide coverage of the long tail of claim-specific vulnerabilities:
+\begin{itemize}[leftmargin=1.4em,itemsep=1pt]
+\item Word Jumbling rescues \textbf{19 claims}. When evidence tampering fails, permuting clause word order breaks verifier reasoning. Because word jumbling preserves token bags-of-words ($J=1.0$), lexical gates cannot detect syntax scrambling; extreme permutations degrade natural fluency.
+\item \textbf{Non-Jumbling Rescues (20 unique claims)}: Even under a conservative ablation strictly excluding word jumbling, \textbf{exactly 20 unique claims (2.40\%)} collapse under non-top perturbations: Syntactic Omission (7 claims; an evidence-level attack), Character Insertion (9), Character Deletion (7), Phonetic Shifts (7), Homoglyphs (6), and Typos (6). Strictly excluding both word jumbling and syntactic omission leaves \textbf{15 unique claims (1.80\%)} that collapse solely under fine-grained surface character, phonetic, and typo edits (5 of which also collapse under word jumbling, while 10 collapse solely under surface edits and resist jumbling).
+\end{itemize}
+Because individual claims can be vulnerable to multiple non-top attacks, per-attack rescue instances sum to 76 across the 34 claims (mean 2.24 successful non-top attacks per claim).
+
+Crucially, these blind spots are disproportionately concentrated in \textbf{Crime \& Public Safety}: 9 of the 34 rescued claims (26.47\%) belong to Crime, despite Crime comprising only 10.70\% (89/832) of the clean corpus (Odds Ratio = 3.23, Bonferroni $p = 0.0402 < 0.05$). This concentration is even more pronounced among fine-grained surface perturbations: Crime accounts for 8 of the 15 pure surface claims (53.33\%, Bonferroni $p = 0.00026$) and 6 of the 8 strictly surface claims excluding jumbling and omission (75.00\%, Bonferroni $p = 0.00018$). A Static Top-5 audit would fail to discover these 34 vulnerabilities within the tested five-query budget, despite their vulnerability to non-top perturbations.
+
+Across all 832 clean claims, \textbf{738 (88.70\%)} are flipped by at least one attack while \textbf{94 (11.30\%)} remain robust. Robust Accuracy $RA_K = \frac{1}{N} \sum_{i=1}^N \prod_{a \in \mathcal{A}_K} \mathbb{I}[ \hat{y}_{i,a} = \hat{y}_i ]$ drops monotonically: $RA_1 = 52.28\%$, $RA_2 = 37.86\%$, $RA_5 = 15.38\%$, $RA_{22} = 11.30\%$ over $N=832$. On the 34 blind-spot claims, Static Top-5 obtains \textbf{0/34 by construction} because these claims define the non-top blind-spot set; the corresponding 0\% RL recall is an empirical result of the learned policy. Since Static Top-5 rankings reflect verifier-specific empirical frequencies, they are not expected to transfer across architectures with differing vulnerability profiles (Section~\ref{sec:transfer}). HAFT therefore treats defensive auditing as a sequential coverage problem.
+
+
+\subsection{The Hybrid Warm-Start Auditor}
+To combine the high initial yield of empirical priors with adaptive exploration for resilient claims, we introduce the \textbf{Hybrid Warm-Start Auditor}:
+\begin{equation}
+\label{eq:hybrid}
+\pi_{\text{hyb}}(a_t \mid \mathbf{s}_t) = \begin{cases} 
+a_{\text{ctx\_rep}}, & t = 1, \\
+a_{\text{adv\_add}}, & t = 2, \\
+\pi_{\theta}(a_t \mid \mathbf{s}_t, \mathbf{m}_t), & t \ge 3,
+\end{cases}
+\end{equation}
+where $a_{\text{ctx\_rep}}$ and $a_{\text{adv\_add}}$ denote the top two empirical evidence attacks (\texttt{EA\_CTXREP} and \texttt{EA\_ADVADD}), fired deterministically at steps $t=1$ and $t=2$, resolving 62.14\% (517/832) of claims instantly. For $t \ge 3$, if the claim remains un-flipped, the trained REINFORCE policy $\pi_{\theta}$ dynamically selects among the remaining 20 attacks conditioned on state $\mathbf{s}_t$ and tried-action mask $\mathbf{m}_t$.
+
+The policies in Table~\ref{tab:selection} optimize different notions of audit effectiveness: Static Top-5 measures the maximum yield obtainable from a fixed empirical attack distribution, whereas Hybrid performs sequential claim-conditioned selection under the same budget.
+
+\begin{table}[!t]
+\caption{Budgeted attack selection benchmark ($K \le 5$, five seeds, mean $\pm$ sample SD, ddof=1). Evaluated over held-out test splits ($N=167$ claims; 60/20/20 train/val/test). Offline policies are trained using train-split outcomes only; test claims are held out. Discovery reports the percentage of claims with $\ge 1$ verified flip; Blind-Spot Recall reports pooled recall across 35 held-out blind-spot evaluation instances; Avg Steps reports the mean of per-split median steps to first flip.}
+\label{tab:selection}
+\vskip 0.05in
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lrrr}
+\toprule
+Method / Policy & Discovery (\%) & Blind-Spot (\%) & Avg Steps \\
+\midrule
+\multicolumn{4}{l}{\emph{Online Dynamic (No prior outcome knowledge)}} \\
+Random-5 Selection & 40.84 $\pm$ 3.29 & 28.57 & 2.60 \\
+UCB Bandit (Claim-Agnostic) & 72.69 $\pm$ 4.43 & 14.29 & 1.00 \\
+\midrule
+\multicolumn{4}{l}{\emph{Warm-Start Exploration Baselines}} \\
+Top-2 + Random (Steps 3--5) & 66.23 $\pm$ 2.83 & 22.86 & 2.00 \\
+\textbf{Hybrid Auditor (Top-2 + RL)} & \textbf{83.71 $\pm$ 2.66} & \textbf{0.00} & \textbf{1.20} \\
+\midrule
+\multicolumn{4}{l}{\emph{Offline Benchmark Policies (Train-split outcomes)}} \\
+Pure RL Selector ($\mathbb{R}^{859}$) & 82.64 $\pm$ 5.08 & 0.00 & 1.20 \\
+Static Top-5 Benchmark (ASR-Ranked) & 86.71 $\pm$ 1.30 & 0.00 & 1.40 \\
+Coverage-Aware Policy (Offline Greedy) & \textbf{86.71 $\pm$ 1.30} & \textbf{51.43} & 1.40 \\
+\midrule
+\multicolumn{4}{l}{\emph{Empirical Reference}} \\
+Oracle-22 (22-Attack Empirical Ceiling) & 88.70 & 100.00 & 22.00 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+Table~\ref{tab:selection} reports multi-seed benchmark results. Key findings:
+1. \textbf{Mean Improvement Over Warm-Start Random Exploration}: The Hybrid Auditor achieves a \textbf{+17.49 pp mean improvement} over the Top-2 + Random baseline (66.23\%$\to$83.71\%; seed bootstrap 95\% CI $[{+}14.97, {+}20.00]$ pp; claim-level bootstrap 95\% CI $[{+}13.93, {+}18.53]$ pp across all 832 claims; paired $t = 12.08$, $p = 0.00027$; Wilcoxon $p = 0.0625$; paired Cohen's $d_z = 5.40$), with strictly positive per-seed gains across all five seeds ($+14.37$ to $+20.96$ pp: Seed 42: $+20.96$, Seed 43: $+20.96$, Seed 44: $+16.17$, Seed 45: $+14.97$, Seed 46: $+14.37$). Because the five-seed Wilcoxon test has a theoretical minimum $p$-value of $0.0625$ ($2 \times 0.5^5$), the result is reported with both bootstrap confidence intervals and parametric metrics rather than an ungrounded claim of non-parametric significance.
+2. \textbf{Average-Case Exploitation vs.\ Vulnerability-Surface Coverage}: Static Top-5 achieves the highest in-distribution discovery (86.71\% $\pm$ 1.30\% on test splits; 84.62\% across the full corpus) because it greedily exploits the dominant empirical attack modality (evidence poisoning). The 2.09 pp difference between test splits and the full corpus is attributable to split variance: across seeds, each 60/20/20 partition sums to exactly 704 / 832 (84.62\%), with test splits drawing slightly more vulnerable claims on average (86.71\%) while validation splits draw fewer (83.13\%). On the 34 non-top blind-spot claims, Static Top-5 obtains \textbf{0/34 by construction} because these claims define the non-top blind-spot set. Crucially, when auditing resilient claims (Steps 3--5), the Hybrid Auditor approximates the high-yield behavior of the empirical ranking while retaining claim-conditioned selection: \texttt{Fact2Fiction}, \texttt{FactMixing}, and Masked-token claim rewrite (\texttt{ClaimRewrite}) account for over 92\% of RL-handover rescues across evaluated seeds. This reveals that return-maximizing RL continues to prefer high-ASR evidence and semantic attacks on resilient claims rather than autonomously exploring the long tail of fine-grained perturbations. Although Hybrid does not match the offline Static Top-5 discovery rate (83.71\% $\pm$ 2.66\% vs.\ 86.71\% $\pm$ 1.30\%; paired $t = -3.74, p = 0.020$), this gap reflects an average-discovery trade-off between maximizing average-case yield and allocating queries adaptively to claims that remain unresolved. Unconstrained RL optimized for immediate flip reward similarly failed to explore the long tail, achieving \textbf{0\% recall across 35 seed-level blind-spot evaluation instances} spanning the 34 unique claims (vs.\ 22.86\% for uniform random exploration; Fisher's exact $p = 0.005$).
+
+\textbf{Average Discovery vs.\ Vulnerability Coverage}: When attack selection is instead optimized for blind-spot coverage on the training split, the resulting greedy coverage policy recovers \textbf{18/35 (51.43\%) seed-level blind-spot evaluation instances} on held-out test folds, while identically matching Static Top-5's average test discovery (86.71\% $\pm$ 1.30\%). Held-out blind-spot coverage across the five evaluation folds was 44.44\% (4/9), 85.71\% (6/7), 0.00\% (0/7, which selected Fact2Fiction instead of Jumbling), 57.14\% (4/7), and 80.00\% (4/5). Pooled coverage was 51.43\% (18/35); the unweighted macro mean across the five folds was 53.46\% $\pm$ 33.68\% (sample SD). These results demonstrate that attack selection that maximizes average vulnerability discovery does not necessarily maximize vulnerability coverage, and that defensive auditing requires explicit coverage-seeking exploration.
+3. \textbf{Rescuing Test Claims}: Across five seeds, the RL handover rescues an average of \textbf{37.0 test claims per split} (185 total episodic rescues across runs; 42, 43, 35, 33, and 32 per seed) that withstood the top-2 evidence attacks. In terms of query efficiency, Random-5 requires 4.05 queries/claim (reaching 40.84\% at $K=5$), Top-2 + Random requires 2.65 queries/claim (66.23\% at $K=5$), Static Top-5 requires 2.48 queries/claim (86.71\% at $K=5$), and Hybrid requires 2.56 queries/claim (83.71\% at $K=5$).
+4. \textbf{RL State Representation Ablation}: To test whether the policy is claim-conditioned, we ablated the state features. In an ablation isolating the learned Steps 3--5 handover under reduced epochs, masking all claim-level semantic features (the 768-dim IndicBERT claim embedding $\mathbf{z}_c$ and the 3-dim verifier verdict $\mathbf{v}$, leaving only the 88-dimensional tried-action mask and outcome history) shifts discovery from \textbf{79.84\% $\pm$ 8.32\% to 77.45\% $\pm$ 2.69\% ($-$2.39 pp, sample SD)}. Given the high fold variance ($\pm 8.32\%$), this difference is modest, indicating that while claim representations provide conditioning signal, action masking and empirical frequency priors drive the baseline policy.
+
+\subsection{RL State, Reward, and Training Specification}
+\label{sec:rl_spec}
+
+To ensure full reproducibility, the RL attack selection MDP is formalized as follows:
+
+\textbf{State Space ($\mathbf{s}_t \in \mathbb{R}^{859}$)}:
+The state vector concatenates four distinct feature groups: $\mathbf{s}_t = [ \mathbf{z}_c \,\|\, \mathbf{v} \,\|\, \mathbf{m}_t \,\|\, \mathbf{h}_t ] \in \mathbb{R}^{859}$, where $\mathbf{z}_c \in \mathbb{R}^{768}$ is the frozen $[\text{CLS}]$ claim embedding extracted from IndicBERT v2; $\mathbf{v} \in \{0, 1\}^3$ is the one-hot encoding of the clean baseline verifier verdict $[\text{SUP}, \text{REF}, \text{NEI}]$; $\mathbf{m}_t \in \{0, 1\}^{22}$ is the binary mask of previously evaluated attacks; and $\mathbf{h}_t \in \{0, 1\}^{66}$ stores the historical 3-bit outcomes of tried attacks ($[\text{gated flip}, \text{judge pass}, \text{raw flip}]$).
+
+\textbf{Action Space and Dynamic Masking}:
+The action space $\mathcal{A}$ comprises all 22 attack mechanisms ($|\mathcal{A}| = 22$). To prevent wasteful duplicate queries, logits for previously tried attacks ($\mathbf{m}_t[i] = 1$) are masked with $-10^9$ before softmax: $\pi_\theta(a_t = i \mid \mathbf{s}_t) = \exp(\tilde{z}_i) / \sum_{j=1}^{22} \exp(\tilde{z}_j)$, where $\tilde{z}_i = z_i$ if $\mathbf{m}_t[i] = 0$ else $-10^9$.
+
+\textbf{Reward Function and Termination}:
+The reward function balances query cost against vulnerability discovery: $R_t = -0.05 + 1.0 \cdot \mathbb{I}[\text{gated flip}] + 0.5 \cdot \mathbb{I}[\text{gated flip} \land a_t \in \text{POS}]$, where $-0.05$ represents the verification API query penalty, and $+1.0$ is the flip discovery reward. The $+0.5$ term is an offline heuristic action bonus applied during training gradient updates to accelerate early policy convergence on severe evidence corruption; it is not present at test time, where the auditor executes pure argmax action selection. Thus, POS membership affects training efficiency but does not alter the test-time discovery criterion. An episode terminates immediately when a flip is found or when the budget $K=5$ is exhausted.
+
+\textbf{Policy Architecture and Training}:
+The policy network $\pi_\theta$ is a 2-layer MLP ($\text{Linear}(859, 256) {\to} \text{ReLU} {\to} \text{Linear}(256, 22)$) trained via REINFORCE with a baseline network $V_\phi$ ($\text{Linear}(859, 128) {\to} \text{ReLU} {\to} \text{Linear}(128, 1)$): $\nabla_\theta J(\theta) = \mathbb{E}_{\tau} [ \sum_t \nabla_\theta \log \pi_\theta(a_t \mid \mathbf{s}_t) \delta_t + \beta \nabla_\theta \mathcal{H}(\pi_\theta) ]$, where $\delta_t = G_t - V_\phi(\mathbf{s}_t)$, $\gamma = 0.99$, $\beta = 0.05$. We train for 25 epochs via Adam ($\alpha_\pi = 0.001$, $\alpha_V = 0.002$), gradient clipping $\|\mathbf{g}\|_2 \le 1.0$, $\epsilon$-greedy exploration ($\epsilon = 0.10$) across five fixed seeds (42--46).
+
+\section{Cross-Architecture Verification Consensus (RQ2)}
+\label{sec:transfer}
+
+To evaluate whether measured vulnerabilities generalize across model families or reflect artifacts of \texttt{gpt-4o-mini}, 966 completed verification pairs were audited on \texttt{Meta-Llama-3-70B-Instruct} (Table~\ref{tab:transfer}). Across all 6 audited LLM arms, \textbf{707 of 966 flips reproduced (73.19\% overall reproduction)}. For arms with $>200$ flips, 200 items were randomly sampled without replacement; for smaller arms (Claim Rewrite $n=164$, Retrieval Noise $n=2$), all available flips were evaluated.
+
+\begin{table}[!t]
+\caption{Cross-model verification audit on Llama 3 70B Instruct across 966 completed pairs. Reprod.\ Rate = Confirmed / Audited.}
+\label{tab:transfer}
+\vskip 0.05in
+\centering
+\resizebox{\columnwidth}{!}{%
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{lrrr}
+\toprule
+Attack Mechanism & Audited & Confirmed & Reprod.\ (\%) \\
+\midrule
+Agentic fictional evidence (Fact2Fiction) & 200 & 200 & \textbf{100.00} \\
+Poisoned evidence addition (AdvAdd) & 200 & 199 & \textbf{99.50} \\
+Contextualized evidence replace & 200 & 179 & \textbf{89.50} \\
+Masked-token claim rewrite & 164 & 121 & 73.78 \\
+Imperceptible retrieval noise & 2 & 1 & 50.00 \\
+Fact mixing & 200 & 7 & \textbf{3.50} \\
+\midrule
+\textbf{Total Audited (6 LLM Arms)} & \textbf{966} & \textbf{707} & \textbf{73.19} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\textbf{Cross-Architecture Reproduction on Audited Evidence-Manipulation Attacks.} Across the three audited evidence-manipulation arms spanning Threat Model B (\texttt{AdvAdd}, \texttt{Fact2Fiction}) and Threat Model C (\texttt{ContextReplace}), 578 of 600 flips reproduced on Llama 3 70B, yielding a \textbf{96.33\% reproduction rate} on this 600-pair subset. Across two independently developed model families (OpenAI closed-weights and Meta open-weights), this indicates that evidence injection is a broadly transferable failure mode; it does not imply generalization to all attack types, as the overall 6-arm reproduction rate is 73.19\%.
+
+\textbf{Fact Mixing Observed as Substantially Verifier-Dependent (3.50\%).} In sharp contrast, Fact Mixing exhibits verifier-specific sensitivity: while it achieves 55.81\% conditional ASR on \texttt{gpt-4o-mini}, only 3.50\% (7/200) of these flips reproduce on Llama 3 70B. In reciprocal evaluations where Llama 3 70B generated attacks ($n=25$ claims, 100 evaluations), overall ASR was 58.0\% and Fact Mixing flipped \texttt{gpt-4o-mini} on 80.0\% of claims. Fact Mixing therefore appears substantially verifier-dependent: its ASR was 55.8\% on \texttt{gpt-4o-mini} in the primary audit, 3.5\% on Llama 3 70B in the transfer audit, and 80.0\% against \texttt{gpt-4o-mini} when attacks were generated by Llama 3 70B, suggesting verifier-specific sensitivity to synthetic multi-claim blending while evidence tampering reproduces reliably across both decoder families. In deployment, a fixed attack ranking would require the attack distribution learned offline to remain appropriate across claims, domains, and verifier architectures. HAFT's cross-model results suggest that such rankings do not transfer directly, underscoring that globally fixed rankings are inherently verifier-dependent.
+
+\textbf{Evaluation Across Decoder and Encoder Architectures.} To evaluate adversarial vulnerability as observed across fact-checking architectures beyond generative decoder LLMs, we evaluated both zero-shot multilingual NLI (\texttt{mDeBERTa-v3-base-xnli}, \citealt{laurer2024less}) and a task-specialized Indic encoder (\texttt{IndicBERTv2-MLM-only}, \citealt{doddapaneni2023indicbert}) fine-tuned directly on 2,801 authentic Hindi fact-checking pairs with zero test overlap.
+
+On clean benchmark claims, \texttt{mDeBERTa-v3} achieves 52.50\% zero-shot accuracy ($N=1,120$), whereas fine-tuned \texttt{IndicBERTv2} achieves \textbf{95.81\% clean accuracy} on the held-out test split (160/167; 98.92\% on SUP, 90.32\% on REF, 100.0\% on NEI). Under adversarial attacks over clean-correct instances, both encoders exhibit acute vulnerability to evidence poisoning: for \texttt{mDeBERTa-v3} ($N=588$), Contextualized Replace achieves \textbf{77.04\% ASR} (453/588) and \texttt{AdvAdd} achieves \textbf{71.60\% ASR} (421/588); for fine-tuned \texttt{IndicBERTv2} ($N=160$), \texttt{Fact2Fiction} achieves \textbf{48.75\% ASR} (78/160), \texttt{AdvAdd} achieves \textbf{43.75\% ASR} (70/160; 64.3\% flipping \texttt{SUP}$\to$\texttt{REF}), and Contextualized Replace achieves \textbf{29.38\% ASR} (47/160).
+
+Cross-paradigm evaluation reveals \textbf{contrasting failure modes (Overwrite vs.\ Epistemic Collapse)}: the evaluated decoder LLMs (\texttt{gpt-4o-mini}, \texttt{Llama-3-70B}) flip $>88\%$ of claims directly SUP$\to$REF ($<$1\% NEI), whereas zero-shot \texttt{mDeBERTa-v3} exhibits epistemic collapse under \texttt{AdvAdd}---68.9\% of flips transition to NEI (182 SUP$\to$NEI, 108 REF$\to$NEI; only 13 SUP$\to$REF)---defaulting to Neutral on premise tension. Fine-tuned \texttt{IndicBERTv2} instead forces direct overwrite (SUP$\to$REF in 45/70 \texttt{AdvAdd} flips), as binary classification heads suppress NEI abstention. Unlike the evaluated decoder LLMs which exhibit subword resilience to character noise ($<$3.5\% ASR), the evaluated dense encoders are acutely fragile to surface perturbations: \texttt{mDeBERTa-v3} suffers \textbf{78.06\% ASR} under Character Insertion (97.2\% of flips to NEI), while fine-tuned \texttt{IndicBERTv2} suffers \textbf{28.75\% ASR} on Character Insertion and \textbf{31.25\% ASR} on Word Jumbling, consistent with Devanagari character noise fragmenting subword tokenization.
+
+\section{Conclusion}
+\label{sec:conclusion}
+We presented HAFT, an adversarial benchmark for Hindi automated fact-checking spanning 1,120 claims, 22 attacks, and 24,640 quality-controlled evaluations. Evidence poisoning achieves 41--48\% unconditional ASR and transfers reliably across independently developed model families (96.33\% across the audited 600-pair evidence-manipulation subset; 73.19\% across all 6 audited arms), whereas character noise remains ineffective ($<$3.5\% on the evaluated decoder verifier). Decoder LLMs exhibit uncalibrated evidence overwrite while dense encoders exhibit epistemic collapse under poisoning and acute fragility to surface perturbations---contrasting failure modes with distinct defensive implications. Under constrained budgets ($K \le 5$), the Hybrid Warm-Start Auditor achieves 83.71\% $\pm$ 2.66\% vulnerability discovery (+17.49 pp over warm-start random; 37.0 rescues per split). A coverage-aware policy recovered 51.43\% of held-out blind-spot evaluation instances while retaining Static Top-5-level average discovery (86.71\% $\pm$ 1.30\%). Overall, HAFT demonstrates that attack selection that maximizes average vulnerability discovery does not necessarily maximize vulnerability coverage. While fixed empirical rankings provide strong average-case discovery, they systematically miss a long tail of claim-specific vulnerabilities. Budget-constrained auditing therefore requires explicit coverage-aware exploration rather than relying solely on globally ranked attack frequencies.
+
+\section*{Limitations}
+\label{sec:limitations}
+
+We highlight six principal limitations of our work:
+\begin{enumerate}[leftmargin=1.4em,itemsep=1pt,topsep=2pt]
+\item \textbf{Catalogue Scope}: While HAFT benchmarks 22 representative attack mechanisms across all 1,120 claims (24,640 evaluations), 31 candidate mechanisms from our broader 53-attack taxonomy remain unmeasured prioritization hypotheses for future expansions.
+\item \textbf{Single-Passage Evidence}: Current benchmark instances evaluate single evidence passages; multi-hop temporal reasoning and multi-document synthesis are left for future extensions.
+\item \textbf{Specialized Task Fine-Tuning}: While we evaluate across decoder LLMs (\texttt{gpt-4o-mini}, \texttt{Llama-3-70B}), cross-lingual encoders (\texttt{mDeBERTa-v3}), and an in-domain fine-tuned Indic encoder (\texttt{IndicBERTv2}), scaling fine-tuning across broader open-weights families (e.g., Qwen 2.5, Llama 3.3, MuRIL) and multi-hop retrieval is an important avenue for future benchmarking.
+\item \textbf{Evidence-Context Injection Simulation}: Threat Model B simulates retrieval poisoning by concatenating fabricated passages into the evidence context rather than poisoning live web indices or dynamic search rerankers.
+\item \textbf{Grammaticality of Word Jumbling}: While Hindi's postpositional case system allows constituent flexibility, arbitrary token permutation can impair natural readability ($J=1.0$).
+\item \textbf{Offline Reference vs.\ Adaptive Deployment}: Static empirical policies provide a useful offline reference for average discovery under an established attack distribution, but serve as offline references rather than claim-adaptive deployment policies because they do not condition attack selection on claim-level audit history or transfer directly across distinct verifier architectures.
+\end{enumerate}
+
+\section*{Ethics and Broader Impact}
+\label{sec:ethics}
+
+Automated fact-checking systems are deployed to protect public information integrity in linguistically diverse regions. By formalizing a 77.27\% reduction in verifier query budgets, HAFT enables resource-constrained civic organizations to stress-test their models. Sourced claims originate from public journalistic archives without private personal identifiable information (PII). All evaluations were executed offline against frozen benchmark claims; no live web endpoints or third-party fact-checking portals were queried or poisoned. Fabricated Devanagari passages are dual-use; to prevent weaponization, code and benchmark datasets are released under CC BY-NC-SA 4.0 strictly for non-commercial defensive research, with supplementary model weights and raw evaluation traces available for verified academic researchers upon request. Native annotators involved in quality calibration received fair above-market compensation and gave informed consent.
+
+\bibliography{custom}
+
+\end{document}
